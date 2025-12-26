@@ -164,9 +164,11 @@ const Cart = () => {
                       </div>
                     </dl>
                     <div className="mt-8">
-                      <Button variant="luxury" size="xl" className="w-full">
-                        Proceed to Checkout
-                      </Button>
+                      <Link to="/checkout/shipping">
+                        <Button variant="luxury" size="xl" className="w-full">
+                          Proceed to Checkout
+                        </Button>
+                      </Link>
                     </div>
                     <div className="mt-6 text-center">
                       <Link to="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

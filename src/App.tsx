@@ -7,6 +7,9 @@ import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
+import CheckoutShipping from "./pages/CheckoutShipping";
+import CheckoutPayment from "./pages/CheckoutPayment";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import Collections from "./pages/Collections";
 import Story from "./pages/Story";
 import NotFound from "./pages/NotFound";
@@ -24,6 +27,9 @@ const App = () => (
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:slug" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout/shipping" element={<CheckoutShipping />} />
+          <Route path="/checkout/payment" element={<CheckoutPayment />} />
+          <Route path="/checkout/confirmation" element={<OrderConfirmation />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/story" element={<Story />} />
           <Route path="*" element={<NotFound />} />
