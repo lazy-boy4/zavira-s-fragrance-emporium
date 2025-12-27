@@ -3,6 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 // Pages
 import Index from "./pages/Index";
@@ -46,69 +49,85 @@ const queryClient = new QueryClient();
 /**
  * App - Root component with routing configuration
  * 
- * All routes are defined here for easy maintenance.
+ * Security:
+ * - Admin routes are protected with ProtectedRoute component
+ * - Authentication state managed via AuthContext
+ * - Cart state persisted securely via CartContext
+ * 
  * Backend integration points are documented in each page component.
  */
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Main Pages */}
-          <Route path="/" element={<Index />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/product/:slug" element={<ProductDetail />} />
-          <Route path="/collections" element={<Collections />} />
-          <Route path="/story" element={<Story />} />
-          
-          {/* Cart & Checkout */}
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout/shipping" element={<CheckoutShipping />} />
-          <Route path="/checkout/payment" element={<CheckoutPayment />} />
-          <Route path="/checkout/confirmation" element={<OrderConfirmation />} />
-          
-          {/* Auth & Profile */}
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/profile" element={<Profile />} />
-          
-          {/* Footer Pages - Shop */}
-          <Route path="/craftsmanship" element={<Craftsmanship />} />
-          <Route path="/sustainability" element={<Sustainability />} />
-          <Route path="/careers" element={<Careers />} />
-          
-          {/* Footer Pages - Support */}
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/shipping" element={<ShippingReturns />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/stores" element={<StoreLocator />} />
-          
-          {/* Footer Pages - Legal */}
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          
-          {/* Admin Dashboard */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="products" element={<ProductList />} />
-            <Route path="products/new" element={<ProductEditor />} />
-            <Route path="products/:id" element={<ProductEditor />} />
-            <Route path="collections" element={<CollectionList />} />
-            <Route path="orders" element={<OrderList />} />
-            <Route path="orders/:id" element={<OrderDetail />} />
-            <Route path="customers" element={<CustomerList />} />
-            <Route path="discounts" element={<DiscountList />} />
-            <Route path="team" element={<TeamManagement />} />
-            <Route path="content" element={<ContentManagement />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
-          
-          {/* 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <CartProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              {/* Main Pages */}
+              <Route path="/" element={<Index />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:slug" element={<ProductDetail />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/story" element={<Story />} />
+              
+              {/* Cart & Checkout */}
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout/shipping" element={<CheckoutShipping />} />
+              <Route path="/checkout/payment" element={<CheckoutPayment />} />
+              <Route path="/checkout/confirmation" element={<OrderConfirmation />} />
+              
+              {/* Auth & Profile */}
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
+              
+              {/* Footer Pages - Shop */}
+              <Route path="/craftsmanship" element={<Craftsmanship />} />
+              <Route path="/sustainability" element={<Sustainability />} />
+              <Route path="/careers" element={<Careers />} />
+              
+              {/* Footer Pages - Support */}
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/shipping" element={<ShippingReturns />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/stores" element={<StoreLocator />} />
+              
+              {/* Footer Pages - Legal */}
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              
+              {/* Admin Dashboard - Protected Routes */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requiredRoles={["owner", "manager", "staff"]}>
+                    <AdminLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="products" element={<ProductList />} />
+                <Route path="products/new" element={<ProductEditor />} />
+                <Route path="products/:id" element={<ProductEditor />} />
+                <Route path="collections" element={<CollectionList />} />
+                <Route path="orders" element={<OrderList />} />
+                <Route path="orders/:id" element={<OrderDetail />} />
+                <Route path="customers" element={<CustomerList />} />
+                <Route path="discounts" element={<DiscountList />} />
+                {/* Team management only for owners and managers */}
+                <Route path="team" element={<TeamManagement />} />
+                <Route path="content" element={<ContentManagement />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
+              
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </CartProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

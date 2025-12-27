@@ -1,64 +1,45 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import productPrimal from "@/assets/product-primal.jpg";
-import productMidnight from "@/assets/product-midnight.jpg";
+import { useCart } from "@/contexts/CartContext";
 
-interface CartItem {
-  id: number;
-  name: string;
-  subtitle: string;
-  size: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
-const initialCart: CartItem[] = [
-  {
-    id: 1,
-    name: "Zavira Primal",
-    subtitle: "Eau de Parfum",
-    size: "50ml / 1.7 FL OZ",
-    price: 125,
-    quantity: 1,
-    image: productPrimal,
-  },
-  {
-    id: 2,
-    name: "Midnight Elixir",
-    subtitle: "Eau de Parfum",
-    size: "100ml / 3.4 FL OZ",
-    price: 185,
-    quantity: 1,
-    image: productMidnight,
-  },
-];
-
+/**
+ * Cart Page - Uses CartContext for state management
+ * 
+ * Security:
+ * - Cart data validated via CartContext
+ * - Max quantity limits enforced
+ * - Prices should be validated server-side during checkout
+ */
 const Cart = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCart);
+  const { 
+    items, 
+    updateQuantity, 
+    removeItem, 
+    getSubtotal, 
+    getShipping, 
+    getTax, 
+    getTotal,
+    isLoading 
+  } = useCart();
 
-  const updateQuantity = (id: number, delta: number) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
+  if (isLoading) {
+    return (
+      <div className="min-h-screen dark">
+        <Header />
+        <main className="pt-20">
+          <section className="py-12 lg:py-24 bg-background">
+            <div className="container mx-auto px-4 lg:px-8 text-center">
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
     );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal >= 150 ? 0 : 15;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  }
 
   return (
     <div className="min-h-screen dark">
@@ -73,7 +54,7 @@ const Cart = () => {
               </p>
             </header>
 
-            {cartItems.length === 0 ? (
+            {items.length === 0 ? (
               <div className="text-center py-16">
                 <p className="text-muted-foreground mb-8">Your cart is empty</p>
                 <Link to="/shop">
@@ -85,7 +66,7 @@ const Cart = () => {
                 {/* Cart Items */}
                 <section className="lg:col-span-7">
                   <div className="border-t border-border divide-y divide-border">
-                    {cartItems.map((item) => (
+                    {items.map((item) => (
                       <div key={item.id} className="flex py-10">
                         <div className="h-32 w-24 flex-shrink-0 overflow-hidden bg-card">
                           <img
@@ -98,7 +79,7 @@ const Cart = () => {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <h3 className="font-display text-lg font-medium">
-                                <Link to={`/product/${item.name.toLowerCase().replace(' ', '-')}`}>
+                                <Link to={`/product/${item.slug}`}>
                                   {item.name}
                                 </Link>
                               </h3>
@@ -106,21 +87,24 @@ const Cart = () => {
                               <p className="mt-1 text-sm text-muted-foreground">{item.size}</p>
                             </div>
                             <div className="flex sm:justify-end items-start">
-                              <p className="text-lg font-medium">${item.price * item.quantity}.00</p>
+                              <p className="text-lg font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                             </div>
                           </div>
                           <div className="flex items-center justify-between mt-4">
                             <div className="flex items-center border border-border">
                               <button
                                 className="p-2 hover:bg-accent transition-colors"
-                                onClick={() => updateQuantity(item.id, -1)}
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                disabled={item.quantity <= 1}
+                                aria-label="Decrease quantity"
                               >
                                 <Minus className="h-4 w-4" />
                               </button>
                               <span className="px-4 py-1 text-sm font-medium">{item.quantity}</span>
                               <button
                                 className="p-2 hover:bg-accent transition-colors"
-                                onClick={() => updateQuantity(item.id, 1)}
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                aria-label="Increase quantity"
                               >
                                 <Plus className="h-4 w-4" />
                               </button>
@@ -128,6 +112,7 @@ const Cart = () => {
                             <button
                               className="text-sm font-medium text-destructive hover:text-destructive/80 flex items-center gap-1 transition-colors"
                               onClick={() => removeItem(item.id)}
+                              aria-label={`Remove ${item.name} from cart`}
                             >
                               <Trash2 className="h-4 w-4" />
                               <span className="hidden sm:inline">Remove</span>
@@ -146,21 +131,21 @@ const Cart = () => {
                     <dl className="space-y-4">
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-muted-foreground">Subtotal</dt>
-                        <dd className="text-sm font-medium">${subtotal.toFixed(2)}</dd>
+                        <dd className="text-sm font-medium">${getSubtotal().toFixed(2)}</dd>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-border">
                         <dt className="text-sm text-muted-foreground">Shipping</dt>
                         <dd className="text-sm font-medium">
-                          {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                          {getShipping() === 0 ? "Free" : `$${getShipping().toFixed(2)}`}
                         </dd>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-border">
                         <dt className="text-sm text-muted-foreground">Tax estimate</dt>
-                        <dd className="text-sm font-medium">${tax.toFixed(2)}</dd>
+                        <dd className="text-sm font-medium">${getTax().toFixed(2)}</dd>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-border">
                         <dt className="text-base font-medium">Order total</dt>
-                        <dd className="text-xl font-display font-medium">${total.toFixed(2)}</dd>
+                        <dd className="text-xl font-display font-medium">${getTotal().toFixed(2)}</dd>
                       </div>
                     </dl>
                     <div className="mt-8">
