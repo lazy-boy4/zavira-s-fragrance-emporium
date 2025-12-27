@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,91 +10,107 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import {
+  loginSchema,
+  signupSchema,
+  LoginFormData,
+  SignupFormData,
+} from "@/lib/validations";
 
 /**
  * Auth Page - Handles both login and signup functionality
  * 
- * Features:
- * - Tabbed interface for login/signup
- * - Password visibility toggle
- * - Form validation ready for Zod integration
- * - Remember me option
- * - Social auth placeholders
+ * Security Features:
+ * - Zod schema validation for all inputs
+ * - Password strength requirements
+ * - Rate limiting ready (backend implementation)
+ * - No sensitive data logged to console
  * 
- * Backend Integration Notes:
- * - Replace handleLogin with API call to POST /api/auth/login
- * - Replace handleSignup with API call to POST /api/auth/register
- * - Store JWT token in httpOnly cookie or secure storage
+ * Demo Accounts:
+ * - admin@zavira.com / Admin123! (Owner)
+ * - manager@zavira.com / Manager123! (Manager)
  */
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, signup, isAuthenticated } = useAuth();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Login form state
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-    remember: false,
+  // Get redirect path from state, default to home
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
+
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    navigate(from, { replace: true });
+  }
+
+  // Login form
+  const loginForm = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      remember: false,
+    },
   });
 
-  // Signup form state
-  const [signupData, setSignupData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    newsletter: true,
-    terms: false,
+  // Signup form
+  const signupForm = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      newsletter: true,
+      terms: undefined as unknown as true,
+    },
   });
 
-  /**
-   * Handle login form submission
-   * TODO: Integrate with backend API
-   */
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const onLogin = async (data: LoginFormData) => {
+    const result = await login(data.email, data.password);
     
-    // Simulate API call - replace with actual auth
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    // TODO: Call API and handle response
-    // const response = await fetch('/api/auth/login', {...})
-    
-    setIsLoading(false);
-    navigate("/profile");
+    if (result.success) {
+      toast({
+        title: "Welcome back",
+        description: "You have been signed in successfully.",
+      });
+      navigate(from, { replace: true });
+    } else {
+      toast({
+        title: "Sign in failed",
+        description: result.error || "Invalid credentials",
+        variant: "destructive",
+      });
+    }
   };
 
-  /**
-   * Handle signup form submission
-   * TODO: Integrate with backend API
-   */
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSignup = async (data: SignupFormData) => {
+    const result = await signup({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+    });
     
-    if (signupData.password !== signupData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
+    if (result.success) {
+      toast({
+        title: "Account created",
+        description: "Welcome to Zavira!",
+      });
+      navigate(from, { replace: true });
+    } else {
+      toast({
+        title: "Registration failed",
+        description: result.error || "Could not create account",
+        variant: "destructive",
+      });
     }
-    
-    if (!signupData.terms) {
-      alert("Please accept the terms and conditions");
-      return;
-    }
-    
-    setIsLoading(true);
-    
-    // Simulate API call - replace with actual auth
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    // TODO: Call API and handle response
-    // const response = await fetch('/api/auth/register', {...})
-    
-    setIsLoading(false);
-    navigate("/profile");
   };
 
   return (
@@ -122,18 +140,20 @@ const Auth = () => {
 
               {/* Login Tab */}
               <TabsContent value="login">
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="login-email">Email Address</Label>
                     <Input
                       id="login-email"
                       type="email"
                       placeholder="your@email.com"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                      {...loginForm.register("email")}
                       className="bg-card border-border"
-                      required
+                      autoComplete="email"
                     />
+                    {loginForm.formState.errors.email && (
+                      <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -151,26 +171,29 @@ const Auth = () => {
                         id="login-password"
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
-                        value={loginData.password}
-                        onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                        {...loginForm.register("password")}
                         className="bg-card border-border pr-10"
-                        required
+                        autoComplete="current-password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
+                    {loginForm.formState.errors.password && (
+                      <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Checkbox
                       id="remember"
-                      checked={loginData.remember}
-                      onCheckedChange={(checked) => setLoginData({ ...loginData, remember: !!checked })}
+                      checked={loginForm.watch("remember")}
+                      onCheckedChange={(checked) => loginForm.setValue("remember", !!checked)}
                     />
                     <Label htmlFor="remember" className="text-sm font-normal cursor-pointer">
                       Remember me
@@ -182,16 +205,16 @@ const Auth = () => {
                     variant="luxury" 
                     size="xl" 
                     className="w-full"
-                    disabled={isLoading}
+                    disabled={loginForm.formState.isSubmitting}
                   >
-                    {isLoading ? "Signing In..." : "Sign In"}
+                    {loginForm.formState.isSubmitting ? "Signing In..." : "Sign In"}
                   </Button>
                 </form>
               </TabsContent>
 
               {/* Signup Tab */}
               <TabsContent value="signup">
-                <form onSubmit={handleSignup} className="space-y-6">
+                <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="firstName">First Name</Label>
@@ -199,11 +222,13 @@ const Auth = () => {
                         id="firstName"
                         type="text"
                         placeholder="First"
-                        value={signupData.firstName}
-                        onChange={(e) => setSignupData({ ...signupData, firstName: e.target.value })}
+                        {...signupForm.register("firstName")}
                         className="bg-card border-border"
-                        required
+                        autoComplete="given-name"
                       />
+                      {signupForm.formState.errors.firstName && (
+                        <p className="text-sm text-destructive">{signupForm.formState.errors.firstName.message}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="lastName">Last Name</Label>
@@ -211,11 +236,13 @@ const Auth = () => {
                         id="lastName"
                         type="text"
                         placeholder="Last"
-                        value={signupData.lastName}
-                        onChange={(e) => setSignupData({ ...signupData, lastName: e.target.value })}
+                        {...signupForm.register("lastName")}
                         className="bg-card border-border"
-                        required
+                        autoComplete="family-name"
                       />
+                      {signupForm.formState.errors.lastName && (
+                        <p className="text-sm text-destructive">{signupForm.formState.errors.lastName.message}</p>
+                      )}
                     </div>
                   </div>
 
@@ -225,11 +252,13 @@ const Auth = () => {
                       id="signup-email"
                       type="email"
                       placeholder="your@email.com"
-                      value={signupData.email}
-                      onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                      {...signupForm.register("email")}
                       className="bg-card border-border"
-                      required
+                      autoComplete="email"
                     />
+                    {signupForm.formState.errors.email && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.email.message}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -239,20 +268,25 @@ const Auth = () => {
                         id="signup-password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Minimum 8 characters"
-                        value={signupData.password}
-                        onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                        {...signupForm.register("password")}
                         className="bg-card border-border pr-10"
-                        minLength={8}
-                        required
+                        autoComplete="new-password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
+                    {signupForm.formState.errors.password && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.password.message}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Must contain uppercase, lowercase, and a number
+                    </p>
                   </div>
 
                   <div className="space-y-2">
@@ -261,19 +295,21 @@ const Auth = () => {
                       id="confirmPassword"
                       type="password"
                       placeholder="••••••••"
-                      value={signupData.confirmPassword}
-                      onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
+                      {...signupForm.register("confirmPassword")}
                       className="bg-card border-border"
-                      required
+                      autoComplete="new-password"
                     />
+                    {signupForm.formState.errors.confirmPassword && (
+                      <p className="text-sm text-destructive">{signupForm.formState.errors.confirmPassword.message}</p>
+                    )}
                   </div>
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-2">
                       <Checkbox
                         id="newsletter"
-                        checked={signupData.newsletter}
-                        onCheckedChange={(checked) => setSignupData({ ...signupData, newsletter: !!checked })}
+                        checked={signupForm.watch("newsletter")}
+                        onCheckedChange={(checked) => signupForm.setValue("newsletter", !!checked)}
                       />
                       <Label htmlFor="newsletter" className="text-sm font-normal cursor-pointer">
                         Subscribe to our newsletter for exclusive offers
@@ -282,20 +318,24 @@ const Auth = () => {
                     <div className="flex items-start gap-2">
                       <Checkbox
                         id="terms"
-                        checked={signupData.terms}
-                        onCheckedChange={(checked) => setSignupData({ ...signupData, terms: !!checked })}
-                        required
+                        checked={signupForm.watch("terms")}
+                        onCheckedChange={(checked) => signupForm.setValue("terms", !!checked as true)}
                       />
-                      <Label htmlFor="terms" className="text-sm font-normal cursor-pointer">
-                        I agree to the{" "}
-                        <Link to="/terms" className="underline hover:text-foreground">
-                          Terms of Service
-                        </Link>{" "}
-                        and{" "}
-                        <Link to="/privacy" className="underline hover:text-foreground">
-                          Privacy Policy
-                        </Link>
-                      </Label>
+                      <div>
+                        <Label htmlFor="terms" className="text-sm font-normal cursor-pointer">
+                          I agree to the{" "}
+                          <Link to="/terms" className="underline hover:text-foreground">
+                            Terms of Service
+                          </Link>{" "}
+                          and{" "}
+                          <Link to="/privacy" className="underline hover:text-foreground">
+                            Privacy Policy
+                          </Link>
+                        </Label>
+                        {signupForm.formState.errors.terms && (
+                          <p className="text-sm text-destructive mt-1">{signupForm.formState.errors.terms.message}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -304,9 +344,9 @@ const Auth = () => {
                     variant="luxury" 
                     size="xl" 
                     className="w-full"
-                    disabled={isLoading}
+                    disabled={signupForm.formState.isSubmitting}
                   >
-                    {isLoading ? "Creating Account..." : "Create Account"}
+                    {signupForm.formState.isSubmitting ? "Creating Account..." : "Create Account"}
                   </Button>
                 </form>
               </TabsContent>

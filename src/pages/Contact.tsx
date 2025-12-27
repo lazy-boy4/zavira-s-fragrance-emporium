@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -6,38 +8,64 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { contactSchema, ContactFormData, sanitizeInput } from "@/lib/validations";
 
 /**
- * Contact Page
+ * Contact Page - Secure contact form
  * 
- * Contact form and company contact information.
- * 
- * Backend Integration Notes:
- * - Form submission should POST to /api/contact
- * - Consider email service integration (SendGrid, etc.)
+ * Security Features:
+ * - Zod schema validation
+ * - Input sanitization
+ * - Rate limiting ready (backend)
+ * - No sensitive data exposure
  */
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  });
 
-    // Simulate API call - replace with actual submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      // Sanitize inputs before sending
+      const sanitizedData = {
+        name: sanitizeInput(data.name),
+        email: data.email.toLowerCase().trim(),
+        subject: sanitizeInput(data.subject),
+        message: sanitizeInput(data.message),
+      };
 
-    // TODO: Submit to backend API
-    // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(formData) })
+      // Simulate API call - replace with actual submission
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setIsSubmitting(false);
-    setSubmitted(true);
+      // TODO: Submit to backend API
+      // await fetch('/api/contact', { 
+      //   method: 'POST', 
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(sanitizedData) 
+      // })
+
+      setSubmitted(true);
+      toast({
+        title: "Message sent",
+        description: "We'll get back to you within 24-48 hours.",
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to send message",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -74,14 +102,14 @@ const Contact = () => {
                       variant="outline"
                       onClick={() => {
                         setSubmitted(false);
-                        setFormData({ name: "", email: "", subject: "", message: "" });
+                        form.reset();
                       }}
                     >
                       Send Another Message
                     </Button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Name</Label>
@@ -89,11 +117,13 @@ const Contact = () => {
                           id="name"
                           type="text"
                           placeholder="Your name"
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          {...form.register("name")}
                           className="bg-card border-border"
-                          required
+                          autoComplete="name"
                         />
+                        {form.formState.errors.name && (
+                          <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
@@ -101,11 +131,13 @@ const Contact = () => {
                           id="email"
                           type="email"
                           placeholder="your@email.com"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          {...form.register("email")}
                           className="bg-card border-border"
-                          required
+                          autoComplete="email"
                         />
+                        {form.formState.errors.email && (
+                          <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+                        )}
                       </div>
                     </div>
 
@@ -115,11 +147,12 @@ const Contact = () => {
                         id="subject"
                         type="text"
                         placeholder="How can we help?"
-                        value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        {...form.register("subject")}
                         className="bg-card border-border"
-                        required
                       />
+                      {form.formState.errors.subject && (
+                        <p className="text-sm text-destructive">{form.formState.errors.subject.message}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -127,11 +160,12 @@ const Contact = () => {
                       <Textarea
                         id="message"
                         placeholder="Your message..."
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        {...form.register("message")}
                         className="bg-card border-border min-h-[150px]"
-                        required
                       />
+                      {form.formState.errors.message && (
+                        <p className="text-sm text-destructive">{form.formState.errors.message.message}</p>
+                      )}
                     </div>
 
                     <Button 
@@ -139,9 +173,9 @@ const Contact = () => {
                       variant="luxury" 
                       size="lg"
                       className="w-full sm:w-auto"
-                      disabled={isSubmitting}
+                      disabled={form.formState.isSubmitting}
                     >
-                      {isSubmitting ? "Sending..." : "Send Message"}
+                      {form.formState.isSubmitting ? "Sending..." : "Send Message"}
                     </Button>
                   </form>
                 )}
