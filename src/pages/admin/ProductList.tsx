@@ -117,12 +117,13 @@ export default function ProductList() {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [products, setProducts] = useState(mockProducts);
 
   const toggleSelectAll = () => {
-    if (selectedProducts.length === mockProducts.length) {
+    if (selectedProducts.length === products.length) {
       setSelectedProducts([]);
     } else {
-      setSelectedProducts(mockProducts.map((p) => p.id));
+      setSelectedProducts(products.map((p) => p.id));
     }
   };
 
@@ -132,7 +133,18 @@ export default function ProductList() {
     );
   };
 
-  const filteredProducts = mockProducts.filter((product) => {
+  const handleDuplicate = (product: typeof mockProducts[0]) => {
+    const duplicated = {
+      ...product,
+      id: `prod_${Date.now()}`,
+      name: `${product.name} (Copy)`,
+      sku: `${product.sku}-COPY`,
+      status: "draft" as const,
+    };
+    setProducts([...products, duplicated]);
+  };
+
+  const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = categoryFilter === "all" || product.category === categoryFilter;
     return matchesSearch && matchesCategory;
@@ -211,7 +223,7 @@ export default function ProductList() {
               <TableRow>
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={selectedProducts.length === mockProducts.length}
+                    checked={selectedProducts.length === products.length && products.length > 0}
                     onCheckedChange={toggleSelectAll}
                   />
                 </TableHead>
@@ -279,7 +291,7 @@ export default function ProductList() {
                         <DropdownMenuItem className="gap-2">
                           <Eye className="h-4 w-4" /> View on Store
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem className="gap-2" onClick={() => handleDuplicate(product)}>
                           <Copy className="h-4 w-4" /> Duplicate
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />

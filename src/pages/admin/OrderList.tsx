@@ -133,6 +133,34 @@ export default function OrderList() {
     );
   };
 
+  const handleExport = () => {
+    // Generate CSV content
+    const headers = ["Order ID", "Customer", "Email", "Items", "Total", "Status", "Payment", "Date"];
+    const rows = filteredOrders.map(order => [
+      order.id,
+      order.customer.name,
+      order.customer.email,
+      order.items.toString(),
+      `$${order.total.toFixed(2)}`,
+      order.status,
+      order.payment,
+      order.date,
+    ]);
+    
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+    ].join("\n");
+    
+    // Create and download file
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `orders-export-${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
   const filteredOrders = mockOrders.filter((order) => {
     const matchesSearch =
       order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -151,9 +179,9 @@ export default function OrderList() {
             Manage customer orders and fulfillment
           </p>
         </div>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2" onClick={() => handleExport()}>
           <Printer className="h-4 w-4" />
-          Export
+          Export CSV
         </Button>
       </div>
 

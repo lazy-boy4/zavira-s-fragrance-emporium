@@ -80,7 +80,7 @@ export default function CollectionList() {
         <NavLink to="/admin/collections/new">
           <Button className="gap-2">
             <Plus className="h-4 w-4" />
-            New Collection
+            Add Collection
           </Button>
         </NavLink>
       </div>
@@ -108,7 +108,7 @@ export default function CollectionList() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <NavLink to={`/admin/collections/${collection.id}`} className="flex items-center gap-2">
+                      <NavLink to={`/admin/collections/${collection.id}/edit`} className="flex items-center gap-2">
                         <Edit className="h-4 w-4" /> Edit
                       </NavLink>
                     </DropdownMenuItem>

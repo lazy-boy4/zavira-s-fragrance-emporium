@@ -36,6 +36,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import ProductList from "./pages/admin/ProductList";
 import ProductEditor from "./pages/admin/ProductEditor";
 import CollectionList from "./pages/admin/CollectionList";
+import CollectionEditor from "./pages/admin/CollectionEditor";
 import OrderList from "./pages/admin/OrderList";
 import OrderDetail from "./pages/admin/OrderDetail";
 import CustomerList from "./pages/admin/CustomerList";
@@ -43,6 +44,7 @@ import DiscountList from "./pages/admin/DiscountList";
 import TeamManagement from "./pages/admin/TeamManagement";
 import ContentManagement from "./pages/admin/ContentManagement";
 import AdminSettings from "./pages/admin/Settings";
+import ShippingSettings from "./pages/admin/ShippingSettings";
 
 const queryClient = new QueryClient();
 
@@ -111,10 +113,14 @@ const App = () => (
                 <Route path="products/new" element={<ProductEditor />} />
                 <Route path="products/:id" element={<ProductEditor />} />
                 <Route path="collections" element={<CollectionList />} />
+                <Route path="collections/new" element={<CollectionEditor />} />
+                <Route path="collections/:id/edit" element={<CollectionEditor />} />
                 <Route path="orders" element={<OrderList />} />
                 <Route path="orders/:id" element={<OrderDetail />} />
                 <Route path="customers" element={<CustomerList />} />
                 <Route path="discounts" element={<DiscountList />} />
+                <Route path="discounts/new" element={<DiscountList />} />
+                <Route path="shipping" element={<ShippingSettings />} />
                 {/* Team management only for owners and managers */}
                 <Route path="team" element={<TeamManagement />} />
                 <Route path="content" element={<ContentManagement />} />
