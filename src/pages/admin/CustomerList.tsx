@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, MoreHorizontal, Mail, Eye } from "lucide-react";
+import { Search, MoreHorizontal, Mail, Eye, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +32,7 @@ const mockCustomers = [
     id: "cust_1",
     name: "John Smith",
     email: "john@example.com",
+    phone: "+1 (555) 123-4567",
     orders: 5,
     spent: 1245.00,
     lastOrder: "2024-12-26",
@@ -41,6 +42,7 @@ const mockCustomers = [
     id: "cust_2",
     name: "Emma Wilson",
     email: "emma@example.com",
+    phone: "+1 (555) 234-5678",
     orders: 3,
     spent: 685.00,
     lastOrder: "2024-12-26",
@@ -50,6 +52,7 @@ const mockCustomers = [
     id: "cust_3",
     name: "Michael Brown",
     email: "michael@example.com",
+    phone: null,
     orders: 8,
     spent: 2340.00,
     lastOrder: "2024-12-25",
@@ -92,6 +95,7 @@ export default function CustomerList() {
             <TableHeader>
               <TableRow>
                 <TableHead>Customer</TableHead>
+                <TableHead>Phone</TableHead>
                 <TableHead>Orders</TableHead>
                 <TableHead>Total Spent</TableHead>
                 <TableHead>Last Order</TableHead>
@@ -114,6 +118,16 @@ export default function CustomerList() {
                         <p className="text-sm text-muted-foreground">{customer.email}</p>
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    {customer.phone ? (
+                      <span className="flex items-center gap-1 text-sm">
+                        <Phone className="h-3 w-3 text-muted-foreground" />
+                        {customer.phone}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">—</span>
+                    )}
                   </TableCell>
                   <TableCell>{customer.orders}</TableCell>
                   <TableCell>${customer.spent.toFixed(2)}</TableCell>

@@ -35,7 +35,7 @@ import {
 const Auth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, signup, isAuthenticated } = useAuth();
+  const { login, signup, isAuthenticated, isAdmin } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -43,9 +43,13 @@ const Auth = () => {
   // Get redirect path from state, default to home
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated - admins go to admin panel
   if (isAuthenticated) {
-    navigate(from, { replace: true });
+    if (isAdmin()) {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate(from, { replace: true });
+    }
   }
 
   // Login form
@@ -80,7 +84,9 @@ const Auth = () => {
         title: "Welcome back",
         description: "You have been signed in successfully.",
       });
-      navigate(from, { replace: true });
+      // Navigation is handled by the isAuthenticated check above
+      // Force re-render to trigger redirect
+      window.location.reload();
     } else {
       toast({
         title: "Sign in failed",
