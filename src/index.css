@@ -43,6 +43,13 @@
     --surface: 0 0% 100%;
     --surface-foreground: 240 10% 4%;
 
+    /* Chart Colors - Professional Data Visualization Palette */
+    --chart-1: 221 83% 53%;
+    --chart-2: 160 84% 39%;
+    --chart-3: 30 95% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 190 90% 45%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5% 26%;
     --sidebar-primary: 240 6% 10%;
@@ -88,6 +95,13 @@
     --silver-foreground: 240 10% 4%;
     --surface: 240 10% 7%;
     --surface-foreground: 0 0% 98%;
+
+    /* Chart Colors - Dark Mode - Bright & Saturated for visibility */
+    --chart-1: 217 91% 60%;
+    --chart-2: 160 84% 50%;
+    --chart-3: 35 95% 60%;
+    --chart-4: 280 70% 65%;
+    --chart-5: 185 90% 55%;
 
     --sidebar-background: 240 6% 10%;
     --sidebar-foreground: 240 5% 96%;
