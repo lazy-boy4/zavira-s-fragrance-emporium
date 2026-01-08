@@ -33,6 +33,7 @@ import NotFound from "./pages/NotFound";
 // Admin Pages
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/Dashboard";
+import Analytics from "./pages/admin/Analytics";
 import ProductList from "./pages/admin/ProductList";
 import ProductEditor from "./pages/admin/ProductEditor";
 import CollectionList from "./pages/admin/CollectionList";
@@ -109,6 +110,7 @@ const App = () => (
                 }
               >
                 <Route index element={<AdminDashboard />} />
+                <Route path="analytics" element={<Analytics />} />
                 <Route path="products" element={<ProductList />} />
                 <Route path="products/new" element={<ProductEditor />} />
                 <Route path="products/:id" element={<ProductEditor />} />
