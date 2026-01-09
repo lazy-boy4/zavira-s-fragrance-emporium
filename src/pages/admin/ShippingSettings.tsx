@@ -81,50 +81,96 @@ const shippingZoneSchema = z.object({
 type ShippingZoneFormData = z.infer<typeof shippingZoneSchema>;
 
 // Mock data
+// Bangladesh-focused shipping zones
 const mockShippingZones = [
   {
     id: "zone_1",
-    name: "Domestic (US)",
-    countries: ["United States"],
-    baseRate: 5.99,
-    freeShippingThreshold: 100,
-    estimatedDays: "3-5",
+    name: "Dhaka Metro",
+    countries: ["Dhaka City", "Dhaka North", "Dhaka South"],
+    baseRate: 60,
+    freeShippingThreshold: 2000,
+    estimatedDays: "1-2",
     isActive: true,
   },
   {
     id: "zone_2",
-    name: "Canada",
-    countries: ["Canada"],
-    baseRate: 12.99,
-    freeShippingThreshold: 150,
-    estimatedDays: "5-7",
+    name: "Dhaka Suburbs",
+    countries: ["Gazipur", "Narayanganj", "Savar", "Tongi", "Keraniganj"],
+    baseRate: 80,
+    freeShippingThreshold: 2500,
+    estimatedDays: "2-3",
     isActive: true,
   },
   {
     id: "zone_3",
-    name: "Europe",
-    countries: ["United Kingdom", "France", "Germany", "Italy", "Spain"],
-    baseRate: 19.99,
-    freeShippingThreshold: 200,
-    estimatedDays: "7-14",
+    name: "Major Cities",
+    countries: ["Chittagong", "Sylhet", "Rajshahi", "Khulna", "Comilla"],
+    baseRate: 120,
+    freeShippingThreshold: 3000,
+    estimatedDays: "3-5",
     isActive: true,
   },
   {
     id: "zone_4",
-    name: "Rest of World",
-    countries: ["All other countries"],
-    baseRate: 29.99,
-    freeShippingThreshold: null,
-    estimatedDays: "14-21",
-    isActive: false,
+    name: "All Bangladesh",
+    countries: ["All other districts"],
+    baseRate: 150,
+    freeShippingThreshold: 4000,
+    estimatedDays: "5-7",
+    isActive: true,
   },
 ];
 
+// Bangladesh delivery partners
 const mockCarriers = [
-  { id: "usps", name: "USPS", enabled: true, trackingUrl: "https://tools.usps.com/go/TrackConfirmAction?tLabels=" },
-  { id: "ups", name: "UPS", enabled: true, trackingUrl: "https://www.ups.com/track?tracknum=" },
-  { id: "fedex", name: "FedEx", enabled: false, trackingUrl: "https://www.fedex.com/fedextrack/?trknbr=" },
-  { id: "dhl", name: "DHL", enabled: false, trackingUrl: "https://www.dhl.com/en/express/tracking.html?AWB=" },
+  { 
+    id: "steadfast", 
+    name: "Steadfast Courier", 
+    enabled: true, 
+    trackingUrl: "https://steadfast.com.bd/tracking/",
+    logo: "🚚",
+    description: "Fast & reliable delivery across Bangladesh"
+  },
+  { 
+    id: "pathao", 
+    name: "Pathao Courier", 
+    enabled: true, 
+    trackingUrl: "https://courier.pathao.com/track/",
+    logo: "🛵",
+    description: "On-demand delivery with real-time tracking"
+  },
+  { 
+    id: "redx", 
+    name: "RedX", 
+    enabled: false, 
+    trackingUrl: "https://redx.com.bd/track/",
+    logo: "📦",
+    description: "Nationwide logistics network"
+  },
+  { 
+    id: "sundarban", 
+    name: "Sundarban Courier", 
+    enabled: false, 
+    trackingUrl: "https://sundarbancourier.com/tracking/",
+    logo: "🚛",
+    description: "Traditional courier with wide coverage"
+  },
+  { 
+    id: "ecourier", 
+    name: "eCourier", 
+    enabled: false, 
+    trackingUrl: "https://ecourier.com.bd/track/",
+    logo: "📬",
+    description: "E-commerce focused logistics"
+  },
+  { 
+    id: "paperfly", 
+    name: "Paperfly", 
+    enabled: false, 
+    trackingUrl: "https://paperfly.com.bd/tracking/",
+    logo: "✈️",
+    description: "Express delivery service"
+  },
 ];
 
 export default function ShippingSettings() {

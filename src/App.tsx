@@ -46,6 +46,9 @@ import TeamManagement from "./pages/admin/TeamManagement";
 import ContentManagement from "./pages/admin/ContentManagement";
 import AdminSettings from "./pages/admin/Settings";
 import ShippingSettings from "./pages/admin/ShippingSettings";
+import LandingPageEditor from "./pages/admin/LandingPageEditor";
+import PaymentSettings from "./pages/admin/PaymentSettings";
+import Help from "./pages/admin/Help";
 
 const queryClient = new QueryClient();
 
@@ -123,10 +126,13 @@ const App = () => (
                 <Route path="discounts" element={<DiscountList />} />
                 <Route path="discounts/new" element={<DiscountList />} />
                 <Route path="shipping" element={<ShippingSettings />} />
+                <Route path="payments" element={<PaymentSettings />} />
+                <Route path="landing-page" element={<LandingPageEditor />} />
                 {/* Team management only for owners and managers */}
                 <Route path="team" element={<TeamManagement />} />
                 <Route path="content" element={<ContentManagement />} />
                 <Route path="settings" element={<AdminSettings />} />
+                <Route path="help" element={<Help />} />
               </Route>
               
               {/* 404 */}
