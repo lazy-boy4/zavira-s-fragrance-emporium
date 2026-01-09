@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   DollarSign,
   ShoppingCart,
@@ -10,6 +11,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "react-router-dom";
+import { DiscountFormModal } from "@/components/admin/DiscountFormModal";
 
 /**
  * Dashboard - Admin overview page
@@ -67,13 +69,15 @@ const recentOrders = [
 ];
 
 const quickActions = [
-  { label: "Add Product", path: "/admin/products/new" },
-  { label: "Create Discount", path: "/admin/discounts/new" },
-  { label: "View Analytics", path: "/admin/analytics" },
-  { label: "Manage Team", path: "/admin/team" },
+  { label: "Add Product", path: "/admin/products/new", isModal: false },
+  { label: "Create Discount", path: "", isModal: true },
+  { label: "View Analytics", path: "/admin/analytics", isModal: false },
+  { label: "Manage Team", path: "/admin/team", isModal: false },
 ];
 
 export default function Dashboard() {
+  const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false);
+
   return (
     <div className="space-y-6">
       {/* Page header */}
@@ -161,16 +165,32 @@ export default function Dashboard() {
             <CardTitle className="font-display tracking-wider">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {quickActions.map((action) => (
-              <NavLink key={action.path} to={action.path} className="block">
-                <Button variant="outline" className="w-full justify-start">
+            {quickActions.map((action) =>
+              action.isModal ? (
+                <Button
+                  key={action.label}
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => setIsDiscountModalOpen(true)}
+                >
                   {action.label}
                 </Button>
-              </NavLink>
-            ))}
+              ) : (
+                <NavLink key={action.path} to={action.path} className="block">
+                  <Button variant="outline" className="w-full justify-start">
+                    {action.label}
+                  </Button>
+                </NavLink>
+              )
+            )}
           </CardContent>
         </Card>
       </div>
+
+      <DiscountFormModal
+        open={isDiscountModalOpen}
+        onOpenChange={setIsDiscountModalOpen}
+      />
     </div>
   );
 }
