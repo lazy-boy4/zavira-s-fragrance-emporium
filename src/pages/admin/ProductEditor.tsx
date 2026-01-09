@@ -59,10 +59,10 @@ interface ProductFormData {
 }
 
 const defaultVariants: ProductVariant[] = [
-  { id: "v1", size: "15ml", price: 85, sku: "", stock: 0 },
-  { id: "v2", size: "50ml", price: 145, sku: "", stock: 0 },
-  { id: "v3", size: "100ml", price: 195, sku: "", stock: 0 },
+  { id: "v1", size: "50ml", price: 145, sku: "", stock: 0 },
 ];
+
+let variantIdCounter = 1;
 
 export default function ProductEditor() {
   const { id } = useParams();
@@ -96,6 +96,24 @@ export default function ProductEditor() {
     const updated = [...formData.variants];
     updated[index] = { ...updated[index], [field]: value };
     updateField("variants", updated);
+  };
+
+  const addVariant = () => {
+    variantIdCounter++;
+    const newVariant: ProductVariant = {
+      id: `v${variantIdCounter}`,
+      size: "",
+      price: 0,
+      sku: "",
+      stock: 0,
+    };
+    updateField("variants", [...formData.variants, newVariant]);
+  };
+
+  const removeVariant = (index: number) => {
+    if (formData.variants.length > 1) {
+      updateField("variants", formData.variants.filter((_, i) => i !== index));
+    }
   };
 
   const updateNote = (index: number, value: string) => {
@@ -242,18 +260,32 @@ export default function ProductEditor() {
 
           {/* Variants */}
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Variants & Pricing</CardTitle>
+              <Button variant="outline" size="sm" onClick={addVariant} className="gap-2">
+                <Plus className="h-4 w-4" /> Add Variant
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {formData.variants.map((variant, index) => (
-                  <div key={variant.id} className="grid gap-4 sm:grid-cols-4 p-4 border border-border rounded">
+                  <div key={variant.id} className="relative grid gap-4 sm:grid-cols-4 p-4 border border-border rounded">
+                    {formData.variants.length > 1 && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        onClick={() => removeVariant(index)}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    )}
                     <div>
                       <Label>Size</Label>
                       <Input
                         value={variant.size}
                         onChange={(e) => updateVariant(index, "size", e.target.value)}
+                        placeholder="e.g., 50ml"
                       />
                     </div>
                     <div>
@@ -261,7 +293,7 @@ export default function ProductEditor() {
                       <Input
                         type="number"
                         value={variant.price}
-                        onChange={(e) => updateVariant(index, "price", parseFloat(e.target.value))}
+                        onChange={(e) => updateVariant(index, "price", parseFloat(e.target.value) || 0)}
                       />
                     </div>
                     <div>
@@ -277,7 +309,7 @@ export default function ProductEditor() {
                       <Input
                         type="number"
                         value={variant.stock}
-                        onChange={(e) => updateVariant(index, "stock", parseInt(e.target.value))}
+                        onChange={(e) => updateVariant(index, "stock", parseInt(e.target.value) || 0)}
                       />
                     </div>
                   </div>

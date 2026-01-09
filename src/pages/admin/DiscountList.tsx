@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import { Plus, MoreHorizontal, Edit, Trash2, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,8 +16,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { DiscountFormModal } from "@/components/admin/DiscountFormModal";
+import { useToast } from "@/hooks/use-toast";
 
 /**
  * DiscountList - Manage discount codes
@@ -64,6 +64,17 @@ const mockDiscounts = [
 ];
 
 export default function DiscountList() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    toast({
+      title: "Copied!",
+      description: `Discount code ${code} copied to clipboard.`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -71,13 +82,16 @@ export default function DiscountList() {
           <h1 className="text-2xl font-display tracking-wider">Discounts</h1>
           <p className="text-muted-foreground mt-1">Manage discount codes and promotions</p>
         </div>
-        <NavLink to="/admin/discounts/new">
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
-            Create Discount
-          </Button>
-        </NavLink>
+        <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
+          <Plus className="h-4 w-4" />
+          Create Discount
+        </Button>
       </div>
+
+      <DiscountFormModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
 
       <Card>
         <CardContent className="p-0">
@@ -101,7 +115,12 @@ export default function DiscountList() {
                       <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
                         {discount.code}
                       </code>
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => handleCopyCode(discount.code)}
+                      >
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
