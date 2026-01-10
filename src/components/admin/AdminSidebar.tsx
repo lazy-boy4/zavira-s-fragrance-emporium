@@ -53,6 +53,7 @@ const navItems: NavItem[] = [
   { label: "Landing Page", path: "/admin/landing-page", icon: FileText, roles: ["owner", "manager"] },
   { label: "Content", path: "/admin/content", icon: FileText, roles: ["owner", "manager"] },
   { label: "Shipping", path: "/admin/shipping", icon: Truck, roles: ["owner"] },
+  { label: "Delivery", path: "/admin/delivery", icon: Truck, roles: ["owner", "manager"] },
   { label: "Payments", path: "/admin/payments", icon: Settings, roles: ["owner"] },
   { label: "Team", path: "/admin/team", icon: UserCog, roles: ["owner"] },
   { label: "Settings", path: "/admin/settings", icon: Settings, roles: ["owner"] },
@@ -81,7 +82,7 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-card border-r border-border transition-all duration-300",
+        "fixed left-0 top-0 z-40 h-screen bg-card border-r border-border transition-all duration-300 flex flex-col",
         collapsed ? "w-16" : "w-64"
       )}
     >
@@ -103,8 +104,8 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
         </Button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex flex-col gap-1 p-2 mt-2">
+      {/* Navigation - Scrollable area */}
+      <nav className="flex flex-col gap-1 p-2 mt-2 flex-1 overflow-y-auto">
         {visibleItems.map((item) => (
           <NavLink
             key={item.path}
@@ -122,8 +123,8 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
         ))}
       </nav>
 
-      {/* Footer */}
-      <div className="absolute bottom-0 left-0 right-0 p-2 border-t border-border">
+      {/* Footer - Fix for overlap on smaller screens */}
+      <div className="mt-auto p-2 border-t border-border">
         <NavLink
           to="/"
           className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
