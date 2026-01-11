@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   Save,
-  Image,
   Type,
   Link as LinkIcon,
   Plus,
@@ -15,6 +14,7 @@ import {
   Layout,
   Megaphone,
 } from "lucide-react";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -346,18 +346,19 @@ export default function LandingPageEditor() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Background Image</Label>
-                    <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-                      <Image className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground mb-2">Click to upload or drag and drop</p>
-                      <p className="text-xs text-muted-foreground">Recommended: 1920x1080px</p>
-                      <Button variant="outline" className="mt-4">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Upload Image
-                      </Button>
-                    </div>
-                  </div>
+                  <ImageUploader
+                    value={pageData.hero.backgroundImage}
+                    onChange={(url) => {
+                      setPageData((prev) => ({
+                        ...prev,
+                        hero: { ...prev.hero, backgroundImage: url },
+                      }));
+                      heroForm.setValue("backgroundImage", url);
+                    }}
+                    aspectRatio="hero"
+                    label="Background Image"
+                    hint="Recommended: 1920x1080px for best quality"
+                  />
 
                   <Separator />
 
@@ -532,18 +533,19 @@ export default function LandingPageEditor() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Section Image</Label>
-                    <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-                      <Image className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground mb-2">Click to upload</p>
-                      <p className="text-xs text-muted-foreground">Square format recommended</p>
-                      <Button variant="outline" className="mt-4">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Upload Image
-                      </Button>
-                    </div>
-                  </div>
+                  <ImageUploader
+                    value={pageData.brandStory.image}
+                    onChange={(url) => {
+                      setPageData((prev) => ({
+                        ...prev,
+                        brandStory: { ...prev.brandStory, image: url },
+                      }));
+                      storyForm.setValue("image", url);
+                    }}
+                    aspectRatio="square"
+                    label="Section Image"
+                    hint="Square format recommended"
+                  />
 
                   <Separator />
 
