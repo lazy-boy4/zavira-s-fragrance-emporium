@@ -32,19 +32,20 @@ Zavira is a premium luxury perfume brand e-commerce platform. This document serv
 ### Phase 1: Frontend (Current)
 
 - Complete visitor experience
-- Product catalog and detail pages
-- Shopping cart and checkout flow
-- Brand storytelling pages
-- Search functionality
-- User authentication (login/signup)
+### Phase 1: Full-Stack Next.js Migration (Current)
 
-### Phase 2: Backend (Planned)
+- **Architecture Strategy**: Single Next.js 16 application (App Router)
+- **Backend Logic**: Secure Next.js API Routes (Serverless/Edge)
+- **Database**: Supabase (PostgreSQL) with mandatory RLS
+- **Authentication**: Supabase Auth (SSR)
+- **Runtime**: Bun 1.3.5
+- **Environment**: Dockerized Local Dev -> Vercel Production
 
-- Golang backend with PostgreSQL/Supabase
-- Product management API
-- Order processing
-- User account management
-- Payment gateway integration
+### Phase 2: Secure Payment & Admin
+
+- **Payment Processing**: Server-side API routes for bKash/Nagad
+- **Admin**: Role-based access via Supabase RLS
+- **Security**: Strict environment variable handling
 
 ## Key Features
 
@@ -72,10 +73,12 @@ Zavira is a premium luxury perfume brand e-commerce platform. This document serv
 
 ## Technical Constraints
 
-- Frontend: React with Vite (Lovable platform limitation - no Next.js)
-- Styling: Tailwind CSS with custom design tokens
-- Backend: Golang with PostgreSQL/Supabase (separate implementation)
-- Must use relative paths (no localhost references)
+- **Framework**: Next.js 16 (App Router)
+- **Runtime**: Bun 1.3.5
+- **Database**: Supabase (PostgreSQL 15+)
+- **Security**: Mandated Row Level Security (RLS)
+- **Sensitive Logic**: MUST run on server (API Routes)
+- **Environment**: Docker for local, Vercel for production
 
 ## Success Metrics
 

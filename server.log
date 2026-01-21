@@ -1,0 +1,40 @@
+$ next dev
+▲ Next.js 16.1.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.255.255.254:3000
+- Environments: .env.local
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 504ms
+ HEAD /shipping 200 in 543ms (compile: 294ms, proxy.ts: 63ms, render: 186ms)
+ GET /terms 200 in 85ms (compile: 28ms, proxy.ts: 5ms, render: 52ms)
+ GET /privacy 200 in 527ms (compile: 482ms, proxy.ts: 3ms, render: 42ms)
+ GET /shipping 200 in 43ms (compile: 2ms, proxy.ts: 3ms, render: 38ms)
+ GET /shipping 200 in 68ms (compile: 9ms, proxy.ts: 4ms, render: 55ms)
+⨯ Error: Invalid src prop (https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800) on `next/image`, hostname "images.unsplash.com" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+    at ignore-listed frames {
+  digest: '376655581@E231'
+}
+⨯ Error: Invalid src prop (https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=800) on `next/image`, hostname "images.unsplash.com" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+    at ignore-listed frames {
+  digest: '1210990938@E231'
+}
+⨯ Error: Invalid src prop (https://images.unsplash.com/photo-1542601906990-b4d3fb7d5b43?w=800) on `next/image`, hostname "images.unsplash.com" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+    at ignore-listed frames {
+  digest: '2186653562@E231'
+}
+ GET /stores 500 in 690ms (compile: 440ms, proxy.ts: 3ms, render: 247ms)
+ GET /craftsmanship 500 in 692ms (compile: 481ms, proxy.ts: 46ms, render: 165ms)
+ GET /sustainability 500 in 666ms (compile: 510ms, proxy.ts: 19ms, render: 137ms)
+ GET /careers 200 in 423ms (compile: 373ms, proxy.ts: 3ms, render: 47ms)
+ GET /shipping 200 in 49ms (compile: 4ms, proxy.ts: 5ms, render: 41ms)
+⨯ Error: Invalid src prop (https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800) on `next/image`, hostname "images.unsplash.com" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+    at ignore-listed frames {
+  digest: '376655581@E231'
+}
+ GET /stores 500 in 49ms (compile: 4ms, proxy.ts: 2ms, render: 43ms)

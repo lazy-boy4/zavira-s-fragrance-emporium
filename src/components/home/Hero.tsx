@@ -1,16 +1,18 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import heroPerfume from "@/assets/hero-perfume.jpg";
 
 export const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
-          src={heroPerfume}
+        <Image
+          src="/images/hero-perfume.jpg"
           alt="Zavira luxury perfume"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
@@ -27,22 +29,18 @@ export const Hero = () => {
             <em className="font-normal">the Noir</em>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-4 font-display italic">
-            L'âme de la Nuit
+            L&apos;âme de la Nuit
           </p>
           <p className="text-muted-foreground max-w-md mb-10 leading-relaxed">
             A captivating journey through darkness and elegance. Experience the soul of the night, crafted with the finest ingredients from France.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/shop">
-              <Button variant="luxury" size="xl">
-                Discover Collection
-              </Button>
-            </Link>
-            <Link to="/story">
-              <Button variant="luxury-outline" size="xl">
-                Our Story
-              </Button>
-            </Link>
+            <Button asChild variant="luxury" size="xl">
+              <Link href="/shop">Discover Collection</Link>
+            </Button>
+            <Button asChild variant="luxury-outline" size="xl">
+              <Link href="/story">Our Story</Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -1,4 +1,8 @@
-import { NavLink, useLocation } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Package,
@@ -19,20 +23,6 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import zaviraLogo from "@/assets/zavira-logo.png";
-
-/**
- * AdminSidebar - Main navigation for admin dashboard
- * 
- * Features:
- * - Collapsible sidebar with icon-only mode
- * - Active route highlighting
- * - Role-based menu visibility (handled by parent)
- * 
- * Backend Integration:
- * - User role determines visible menu items
- * - Permissions fetched from /api/admin/me endpoint
- */
 
 interface NavItem {
   label: string;
@@ -67,16 +57,16 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   // Filter nav items based on user role
   const visibleItems = navItems.filter((item) => item.roles.includes(userRole));
 
   const isActive = (path: string) => {
     if (path === "/admin") {
-      return location.pathname === "/admin";
+      return pathname === "/admin";
     }
-    return location.pathname.startsWith(path);
+    return pathname.startsWith(path);
   };
 
   return (
@@ -86,52 +76,61 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
         collapsed ? "w-16" : "w-64"
       )}
     >
-      {/* Logo */}
       <div className="flex h-16 items-center justify-between px-4 border-b border-border">
         {!collapsed && (
-          <NavLink to="/admin" className="flex items-center gap-2">
-            <img src={zaviraLogo} alt="Zavira" className="h-8 w-auto invert dark:invert-0" />
+          <Link href="/admin" className="flex items-center gap-2">
+            <div className="relative h-8 w-auto aspect-[3/1]">
+              <Image 
+                src="/assets/zavira-logo.png" 
+                alt="Zavira" 
+                width={120} 
+                height={40}
+                className="h-8 w-auto object-contain invert dark:invert-0"
+                priority
+              />
+            </div>
             <span className="font-display text-lg tracking-wider">ADMIN</span>
-          </NavLink>
+          </Link>
         )}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setCollapsed(!collapsed)}
           className="ml-auto"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
       </div>
 
-      {/* Navigation - Scrollable area */}
       <nav className="flex flex-col gap-1 p-2 mt-2 flex-1 overflow-y-auto">
         {visibleItems.map((item) => (
-          <NavLink
+          <Link
             key={item.path}
-            to={item.path}
+            href={item.path}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm transition-colors",
               isActive(item.path)
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground"
             )}
+            title={collapsed ? item.label : undefined}
           >
-            <item.icon className="h-5 w-5 flex-shrink-0" />
+            <item.icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
             {!collapsed && <span>{item.label}</span>}
-          </NavLink>
+          </Link>
         ))}
       </nav>
 
-      {/* Footer - Fix for overlap on smaller screens */}
       <div className="mt-auto p-2 border-t border-border">
-        <NavLink
-          to="/"
+        <Link
+          href="/"
           className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          title={collapsed ? "Back to Store" : undefined}
         >
-          <LogOut className="h-5 w-5 flex-shrink-0" />
+          <LogOut className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
           {!collapsed && <span>Back to Store</span>}
-        </NavLink>
+        </Link>
       </div>
     </aside>
   );

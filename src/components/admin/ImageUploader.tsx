@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useCallback } from "react";
 import { Upload, X, ZoomIn, ZoomOut, RotateCw, Check, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,20 +12,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-
-/**
- * ImageUploader - Reusable image upload component with preview and crop
- * 
- * Features:
- * - Drag and drop support
- * - File browser support
- * - Image preview
- * - Basic crop/zoom controls
- * - Aspect ratio control
- * 
- * Backend Integration:
- * - POST /api/admin/upload - Upload image to storage
- */
 
 interface ImageUploaderProps {
   value?: string;
@@ -136,6 +124,7 @@ export function ImageUploader({
               className="relative overflow-hidden rounded-lg border border-border bg-muted"
               style={{ paddingBottom: `${paddingBottom}%` }}
             >
+              {/* Using standard img for blob/data URLs to avoid next/image config issues during preview */}
               <img
                 src={previewUrl}
                 alt="Uploaded image"
@@ -146,6 +135,7 @@ export function ImageUploader({
                   variant="secondary"
                   size="sm"
                   onClick={() => fileInputRef.current?.click()}
+                  aria-label="Replace image"
                 >
                   Replace
                 </Button>
@@ -153,6 +143,7 @@ export function ImageUploader({
                   variant="destructive"
                   size="sm"
                   onClick={handleRemove}
+                  aria-label="Remove image"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -173,9 +164,17 @@ export function ImageUploader({
               "flex flex-col items-center justify-center text-center"
             )}
             style={{ paddingBottom: `${paddingBottom}%` }}
+            aria-label="Upload image area"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                fileInputRef.current?.click();
+              }
+            }}
           >
             <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
-              <ImageIcon className="h-10 w-10 text-muted-foreground mb-3" />
+              <ImageIcon className="h-10 w-10 text-muted-foreground mb-3" aria-hidden="true" />
               <p className="text-sm font-medium text-foreground mb-1">
                 {isDragging ? "Drop image here" : "Click to upload"}
               </p>
@@ -199,6 +198,7 @@ export function ImageUploader({
           accept="image/*"
           onChange={handleFileInput}
           className="hidden"
+          aria-hidden="true"
         />
       </div>
 
@@ -231,7 +231,7 @@ export function ImageUploader({
             <div className="space-y-4">
               {/* Zoom Control */}
               <div className="flex items-center gap-4">
-                <ZoomOut className="h-4 w-4 text-muted-foreground" />
+                <ZoomOut className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <Slider
                   value={[zoom]}
                   onValueChange={([value]) => setZoom(value)}
@@ -239,8 +239,9 @@ export function ImageUploader({
                   max={2}
                   step={0.1}
                   className="flex-1"
+                  aria-label="Zoom"
                 />
-                <ZoomIn className="h-4 w-4 text-muted-foreground" />
+                <ZoomIn className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <span className="text-sm text-muted-foreground w-12 text-right">
                   {Math.round(zoom * 100)}%
                 </span>
@@ -248,7 +249,7 @@ export function ImageUploader({
 
               {/* Rotation Control */}
               <div className="flex items-center gap-4">
-                <RotateCw className="h-4 w-4 text-muted-foreground" />
+                <RotateCw className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 <Slider
                   value={[rotation]}
                   onValueChange={([value]) => setRotation(value)}
@@ -256,6 +257,7 @@ export function ImageUploader({
                   max={360}
                   step={1}
                   className="flex-1"
+                  aria-label="Rotate"
                 />
                 <span className="text-sm text-muted-foreground w-12 text-right">
                   {rotation}°
@@ -269,7 +271,7 @@ export function ImageUploader({
               Cancel
             </Button>
             <Button onClick={handleSave} className="gap-2">
-              <Check className="h-4 w-4" />
+              <Check className="h-4 w-4" aria-hidden="true" />
               Apply
             </Button>
           </DialogFooter>

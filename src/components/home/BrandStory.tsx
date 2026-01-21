@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import productBox from "@/assets/product-box.png";
 
 export const BrandStory = () => {
   return (
@@ -9,11 +9,12 @@ export const BrandStory = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Image */}
           <div className="relative">
-            <div className="aspect-square overflow-hidden">
-              <img
-                src={productBox}
+            <div className="aspect-square overflow-hidden relative">
+              <Image
+                src="/images/product-box.png"
                 alt="Zavira packaging"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <div className="absolute -bottom-8 -right-8 w-32 h-32 border border-border" />
@@ -40,11 +41,9 @@ export const BrandStory = () => {
               </p>
             </div>
             <div className="mt-10">
-              <Link to="/story">
-                <Button variant="luxury-outline" size="lg">
-                  Discover Our Story
-                </Button>
-              </Link>
+              <Button asChild variant="luxury-outline" size="lg">
+                <Link href="/story">Discover Our Story</Link>
+              </Button>
             </div>
           </div>
         </div>

@@ -1,9 +1,6 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import productPrimal from "@/assets/product-primal.jpg";
-import productMidnight from "@/assets/product-midnight.jpg";
-import productEssence from "@/assets/product-essence.jpg";
-import productVelvet from "@/assets/product-velvet.jpg";
 
 const products = [
   {
@@ -12,7 +9,7 @@ const products = [
     subtitle: "Eau de Parfum",
     price: 125,
     size: "50ml / 1.7 FL OZ",
-    image: productPrimal,
+    image: "/images/product-primal.jpg",
     slug: "primal",
   },
   {
@@ -21,7 +18,7 @@ const products = [
     subtitle: "Eau de Parfum",
     price: 185,
     size: "100ml / 3.4 FL OZ",
-    image: productMidnight,
+    image: "/images/product-midnight.jpg",
     slug: "midnight-elixir",
   },
   {
@@ -30,7 +27,7 @@ const products = [
     subtitle: "Eau de Parfum",
     price: 145,
     size: "75ml / 2.5 FL OZ",
-    image: productEssence,
+    image: "/images/product-essence.jpg",
     slug: "rose-noir",
   },
   {
@@ -39,7 +36,7 @@ const products = [
     subtitle: "Eau de Parfum",
     price: 165,
     size: "100ml / 3.4 FL OZ",
-    image: productVelvet,
+    image: "/images/product-velvet.jpg",
     slug: "velvet-amber",
   },
 ];
@@ -66,14 +63,15 @@ export const FeaturedProducts = () => {
           {products.map((product) => (
             <Link
               key={product.id}
-              to={`/product/${product.slug}`}
+              href={`/product/${product.slug}`}
               className="group"
             >
               <div className="relative aspect-[3/4] mb-6 overflow-hidden bg-background">
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300" />
               </div>
@@ -95,11 +93,9 @@ export const FeaturedProducts = () => {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <Link to="/shop">
-            <Button variant="luxury-outline" size="lg">
-              View All Fragrances
-            </Button>
-          </Link>
+          <Button asChild variant="luxury-outline" size="lg">
+            <Link href="/shop">View All Fragrances</Link>
+          </Button>
         </div>
       </div>
     </section>

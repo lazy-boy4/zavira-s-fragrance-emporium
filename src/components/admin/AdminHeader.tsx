@@ -1,4 +1,6 @@
-import { Bell, Search, User, Menu } from "lucide-react";
+"use client";
+
+import { Bell, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,20 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-/**
- * AdminHeader - Top navigation bar for admin dashboard
- * 
- * Features:
- * - Global search across products, orders, customers
- * - Notification center
- * - User profile dropdown
- * 
- * Backend Integration:
- * - GET /api/admin/search?q={query} - Global search
- * - GET /api/admin/notifications - Fetch notifications
- * - GET /api/admin/me - Current user info
- */
 
 interface AdminHeaderProps {
   /** Toggle mobile sidebar */
@@ -53,6 +41,7 @@ export default function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
         size="icon"
         className="lg:hidden"
         onClick={onMenuClick}
+        aria-label="Toggle menu"
       >
         <Menu className="h-5 w-5" />
       </Button>
@@ -60,11 +49,12 @@ export default function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
       {/* Search */}
       <div className="hidden md:flex items-center flex-1 max-w-md mx-4">
         <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <Input
             type="search"
             placeholder="Search products, orders, customers..."
             className="pl-10 bg-background"
+            aria-label="Global search"
           />
         </div>
       </div>
@@ -72,14 +62,14 @@ export default function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
       {/* Right side actions */}
       <div className="flex items-center gap-2">
         {/* Mobile search */}
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Search">
           <Search className="h-5 w-5" />
         </Button>
 
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
               <Bell className="h-5 w-5" />
               {/* Notification badge */}
               <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full" />
@@ -108,9 +98,9 @@ export default function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2 px-2">
+            <Button variant="ghost" className="flex items-center gap-2 px-2" aria-label="User menu">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={currentUser.avatar} />
+                <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                   {currentUser.name.split(" ").map((n) => n[0]).join("")}
                 </AvatarFallback>

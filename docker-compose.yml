@@ -1,0 +1,33 @@
+services:
+  app:
+    container_name: zavira-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    networks:
+      - zavira-network
+
+  supabase:
+    image: supabase/postgres:15.1.0.147
+    container_name: zavira-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - zavira-network
+
+networks:
+  zavira-network:
+    driver: bridge
+
+volumes:
+  db-data:

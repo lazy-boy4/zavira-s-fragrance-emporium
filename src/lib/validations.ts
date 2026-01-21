@@ -45,8 +45,8 @@ export const signupSchema = z
     password: passwordSchema,
     confirmPassword: z.string().min(1, "Please confirm your password"),
     newsletter: z.boolean().optional(),
-    terms: z.literal(true, {
-      errorMap: () => ({ message: "You must accept the terms and conditions" }),
+    terms: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and conditions",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {

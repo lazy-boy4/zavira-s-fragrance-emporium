@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import zaviraLogo from "@/assets/zavira-logo.png";
+import Link from "next/link";
+import Image from "next/image";
 
 const footerLinks = {
   shop: [
@@ -29,11 +29,14 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link to="/" className="inline-block mb-6">
-              <img
-                src={zaviraLogo}
+            <Link href="/" className="inline-block mb-6">
+              <Image
+                src="/assets/zavira-logo.png"
                 alt="Zavira"
+                width={120}
+                height={32}
                 className="h-8 w-auto invert dark:invert-0"
+                priority
               />
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-6">
@@ -51,7 +54,7 @@ export const Footer = () => {
               {footerLinks.shop.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
@@ -68,7 +71,7 @@ export const Footer = () => {
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
@@ -85,7 +88,7 @@ export const Footer = () => {
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
                   <Link
-                    to={link.href}
+                    href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
@@ -102,10 +105,10 @@ export const Footer = () => {
             © {new Date().getFullYear()} Zavira Parfums. All rights reserved. Made in France.
           </p>
           <div className="flex items-center gap-6">
-            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Terms of Service
             </Link>
           </div>

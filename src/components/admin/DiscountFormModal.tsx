@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,14 +33,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 
-/**
- * DiscountFormModal - Modal for creating/editing discounts
- * 
- * Backend Integration:
- * - POST /api/admin/discounts - Create discount
- * - PUT /api/admin/discounts/:id - Update discount
- */
-
 const discountSchema = z.object({
   code: z
     .string()
@@ -48,9 +42,9 @@ const discountSchema = z.object({
     .transform((val) => val.toUpperCase()),
   type: z.enum(["percentage", "fixed", "shipping"]),
   value: z.coerce.number().min(0, "Value must be positive"),
-  usageLimit: z.coerce.number().min(0).optional().nullable(),
-  minOrderAmount: z.coerce.number().min(0).optional().nullable(),
-  expiresAt: z.string().optional().nullable(),
+  usageLimit: z.coerce.number().min(0).optional(),
+  minOrderAmount: z.coerce.number().min(0).optional(),
+  expiresAt: z.string().optional(),
   isActive: z.boolean(),
 });
 
@@ -71,14 +65,14 @@ export function DiscountFormModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<DiscountFormData>({
-    resolver: zodResolver(discountSchema),
+    resolver: zodResolver(discountSchema) as any,
     defaultValues: {
       code: "",
       type: "percentage",
       value: 10,
-      usageLimit: null,
-      minOrderAmount: null,
-      expiresAt: null,
+      usageLimit: undefined,
+      minOrderAmount: undefined,
+      expiresAt: undefined,
       isActive: true,
     },
   });
@@ -150,6 +144,7 @@ export function DiscountFormModal({
                         type="button"
                         variant="outline"
                         onClick={generateRandomCode}
+                        aria-label="Generate random code"
                       >
                         Generate
                       </Button>
@@ -199,6 +194,7 @@ export function DiscountFormModal({
                         <Input
                           type="number"
                           {...field}
+                          value={field.value ?? ""}
                           placeholder={discountType === "percentage" ? "20" : "10"}
                           className="pr-8"
                         />

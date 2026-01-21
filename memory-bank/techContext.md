@@ -2,33 +2,18 @@
 
 ## Technology Stack
 
-### Frontend (Current)
+### Full Stack Architecture (Current)
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| React | 18.3.1 | UI library |
-| Vite | Latest | Build tool and dev server |
-| TypeScript | Latest | Type safety |
-| Tailwind CSS | Latest | Utility-first styling |
-| React Router | 6.30.1 | Client-side routing |
-| TanStack Query | 5.83.0 | Data fetching (ready for use) |
-
-### UI Components
-
-| Package | Purpose |
-|---------|---------|
-| shadcn/ui | Base component library |
-| Radix UI | Accessible primitives |
-| Lucide React | Icon library |
-| class-variance-authority | Component variants |
-
-### Backend (Planned)
-
-| Technology | Purpose |
-|------------|---------|
-| Golang | Backend language |
-| PostgreSQL | Primary database |
-| Supabase | Backend-as-a-service option |
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Core** | Next.js | 16.x | Full-stack Framework (App Router) |
+| **Runtime** | Bun | 1.3.5 | Package Manager & Runtime |
+| **Language** | TypeScript | Latest | Type Safety |
+| **Database** | PostgreSQL | 15+ | Relational Data (via Supabase) |
+| **Auth** | Supabase Auth | SSR | Authentication & Session |
+| **Security** | RLS | - | Database Authorization |
+| **Styling** | Tailwind CSS | v3 | Utility-first Styling (Downgraded from v4 for compat) |
+| **UI** | Shadcn/UI | - | Accessible Components |
 
 ## Development Setup
 
@@ -117,7 +102,35 @@ VITE_SUPABASE_ANON_KEY=
 - Largest Contentful Paint: < 2.5s
 - Time to Interactive: < 3s
 
-## Code Standards
+## Code Standards & Best Practices
+
+### Vercel React Best Practices (MANDATORY)
+1. **No Waterfalls**: Use `Promise.all` for independent fetches. Use `Suspense` for streaming.
+2. **Bundle Size**: 
+   - **NO Barrel Imports**: Import directly (e.g., `import Button from '@/components/Button'`).
+   - **Dynamic Imports**: Use `next/dynamic` for heavy components (charts, maps).
+   - **Defer**: Load third-party scripts after hydration.
+3. **Server-Side**:
+   - Minimize serialization at RSC boundaries.
+   - Use `React.cache()` for non-fetch async tasks.
+   - Use `after()` for non-blocking side effects.
+4. **Client-Side**:
+   - Use functional `setState` (e.g., `setCount(c => c + 1)`).
+   - Use `{ passive: true }` for scroll listeners.
+
+### Web Interface Guidelines (UX/A11y)
+1. **Accessibility**: 
+   - Semantic HTML (`<button>` vs `<div>`).
+   - `aria-label` for icon-only buttons.
+   - `:focus-visible` for keyboard focus.
+2. **Forms**: 
+   - Native inputs with correct `type` and `autocomplete`.
+   - Inline validation errors.
+   - Do NOT block paste.
+3. **Performance**:
+   - Explicit `width`/`height` for images.
+   - `loading="lazy"` for below-fold images.
+   - `content-visibility: auto` for long lists.
 
 ### File Naming
 

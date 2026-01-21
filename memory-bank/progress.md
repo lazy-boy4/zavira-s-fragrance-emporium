@@ -22,8 +22,16 @@
   - Collection cards
   - Category navigation
 - [x] Our Story (`/story`)
-  - Brand narrative
+  - Brand narrative sections
   - Craftsmanship section
+  - Values showcase (Excellence, Sustainability, Individuality)
+- [x] FAQ (`/faq`)
+  - Accordion-based FAQ categories
+  - Orders & Shipping, Products, Returns & Changes, Account & Payment
+- [x] Contact Us (`/contact`)
+  - Contact form with validation
+  - Contact info (email, phone, address, hours)
+  - Quick links to FAQ, Shipping, Stores
 
 ### Checkout Flow ✅
 
@@ -31,21 +39,21 @@
   - Item list with images
   - Quantity adjustment
   - Remove items
-  - Order summary
-  - Free shipping threshold
-- [x] Shipping (`/checkout/shipping`)
-  - Contact form
-  - Address form
-  - Progress indicator
+  - Order summary with subtotal, shipping, tax, total
+  - CartContext for state management
+- [x] Checkout Shipping (`/checkout/shipping`)
+  - Shipping form with validation
+  - Address form (name, address, city, zip, country, phone)
+  - Newsletter checkbox
   - Order summary sidebar
-- [x] Payment (`/checkout/payment`)
-  - Payment method selection
-  - Credit/debit, mobile payment, COD
+- [x] Checkout Payment (`/checkout/payment`)
+  - Payment method selection (Card, Mobile, COD)
+  - Credit card form fields
   - Order summary
-- [x] Confirmation (`/checkout/confirmation`)
-  - Order details
-  - Shipping info
-  - Payment confirmation
+  - Place order button
+- [x] Checkout Confirmation (`/checkout/confirmation`)
+  - Thank you message
+  - Order details display
 
 ### Layout Components ✅
 
@@ -103,24 +111,15 @@
   - Recent orders list
   - Top selling products
   - Quick actions (Create Discount)
-- [x] Product Management
-  - Product list with search, filters, bulk actions
-  - Product editor with unlimited variants
-  - Image upload UI
-  - SEO fields
-- [x] Collection Management
-  - Collection list with stats
-  - Create/edit collections
-  - Product count per collection
 - [x] Order Management
-  - Order list with status filters
-  - Order detail with timeline
-  - Status updates
-  - Customer info, items, payment details
+  - [x] Order list with status filters (`src/app/admin/orders`)
+  - [x] Order detail with timeline (`src/app/admin/orders/[id]`)
+  - [x] Status updates
+  - [x] Customer info, items, payment details
 - [x] Customer Management
-  - Customer list with search
-  - Customer stats (orders, total spent)
-  - Tags for segmentation
+  - [x] Customer list with search (`src/app/admin/customers`)
+  - [x] Customer stats (orders, total spent)
+  - [x] Tags for segmentation
 - [x] Discount Management
   - Discount list with usage stats
   - Create/edit discount codes (modal)
@@ -166,8 +165,31 @@
 
 ## What's Left to Build
 
+### Migration Phase 2: Components & Pages 🔄
+- [x] **Admin Foundation**: Layout, Dashboard
+- [x] **Admin Pages**:
+  - [x] Product Management (`/admin/products`, `/admin/products/new`, `/admin/products/[id]`)
+  - [x] Order Management (`/admin/orders`, `/admin/orders/[id]`)
+  - [x] Customer Management (`/admin/customers`)
+  - [x] Discount Management (`/admin/discounts`)
+  - [x] Team Management (`/admin/team`)
+  - [x] Content Management
+  - [x] Landing Page Editor (`/admin/landing-page`)
+  - [x] Store Settings (`/admin/settings`)
+  - [x] Delivery Tracking (`/admin/delivery`)
+  - [x] Help Center (`/admin/help`)
+- [x] **Shop Pages**:
+  - [x] Product Listing (`/shop`)
+  - [x] Product Detail (`/product/[slug]`)
+- [x] **Checkout Flow**:
+  - [x] Cart
+  - [x] Checkout steps
+- [x] **Utility Pages**:
+  - [x] FAQ, Contact, Privacy, Terms, Shipping, Stores, Craftsmanship, Sustainability, Careers
+
 ### Backend Integration (Agent B)
 
+- [x] Supabase Local Development (Docker)
 - [ ] Supabase/PostgreSQL database setup
 - [ ] API client setup with authentication
 - [ ] React Query hooks for data fetching
@@ -186,14 +208,17 @@
 - [ ] Recently viewed products
 - [ ] Social sharing
 - [ ] Email notifications
-
-### Technical
-
 - [ ] Cart state persistence (localStorage + API)
 - [ ] Loading states throughout (skeletons implemented)
 - [ ] Error boundaries
 - [ ] Auth guards for protected routes
 - [ ] SEO meta tags optimization
+
+### Technical
+
+- [ ] Cart state persistence (localStorage + API)
+- [ ] All data is mock data until backend integration
+- [ ] Image uploads save locally (need Supabase Storage)
 
 ## Known Issues
 
@@ -201,6 +226,7 @@
 
 1. ~~Admin sidebar overlapping buttons on small screens~~ - Fixed with flex layout
 2. ~~Image upload not functional~~ - Added ImageUploader component with preview/crop
+3. ~~Tailwind v4 incompatibility~~ - Downgraded to v3 for Next.js 16/PostCSS support
 
 ### Minor
 
@@ -213,6 +239,7 @@
 1. Mobile menu scroll behavior
 2. Image loading performance
 3. Form accessibility
+4. SEO meta tags
 
 ## Technical Debt
 
@@ -239,52 +266,45 @@ All documentation complete for Agent B handoff:
 
 ## Changelog
 
-### 2025-01-11 (Current Session)
+### 2025-01-21 (Current Session)
+
+- **Completed Frontend Migration:**
+  - Migrated all remaining utility pages (`/privacy`, `/terms`, `/shipping`, `/stores`, `/craftsmanship`, `/sustainability`, `/careers`)
+  - Verified all core pages (`/shop`, `/product/[slug]`, `/cart`, `/checkout/*`, `/admin/*`)
+  - Updated project structure for Next.js App Router
+- **Backend Integration Started:**
+  - Supabase local environment configured
+  - Next step: Database schema setup
+
+### 2025-01-11 (Previous Session)
 
 - Added ImageUploader component with drag-drop, preview, and crop
 - Integrated ImageUploader into Landing Page Editor
 - Fixed responsive sidebar button overlapping issue
 - Updated all memory bank documentation
 - Finalized frontend for backend handoff
-
-### 2024-12-28
-
-- Created Delivery Tracking page with Steadfast/Pathao integration
+- Created backend documentation
 - Created designPhilosophy.md with complete design guidelines
 - Created dataIntegrationGuide.md for Google Sheets integration
 - Fixed responsive issues in admin sidebar
 - Added test connection buttons to payment/shipping settings
 
-### 2024-12-27
+### 2024-12-28
 
-- Completed admin dashboard
-  - Dashboard with stats and charts
-  - Product management (list, create, edit)
-  - Collection management
-  - Order management with detail view
-  - Customer management
-  - Discount management with modal
-  - Team/staff management
-  - Content management
-  - Store settings
-  - Landing Page Editor
-  - Help Center
-  - Payment Settings (Bangladesh focused)
-  - Shipping Settings (Bangladesh focused)
-- Created backend documentation
-  - Complete database schema
-  - API specifications
-  - Auth and role system
-  - Integration checklist
-
-### 2024-12-26
-
-- Created memory bank structure
-- Documented project architecture
-- Built search functionality
-- Created auth pages (login/signup)
-- Created profile page with tabs
-- Built all footer pages
+- Created admin dashboard
+- Created product management (list, create, edit)
+- Created collection management
+- Created order management with detail view
+- Created customer management
+- Created discount management with modal
+- Created team/staff management
+- Created content management
+- Created store settings
+- Created landing page editor
+- Created help center
+- Created payment settings (Bangladesh focused)
+- Created shipping settings (Bangladesh focused)
+- Created delivery tracking with Steadfast/Pathao integration
 
 ### Previous
 
@@ -292,3 +312,4 @@ All documentation complete for Agent B handoff:
 - Homepage, shop, cart pages
 - Complete checkout flow
 - Collections and story pages
+- All footer pages

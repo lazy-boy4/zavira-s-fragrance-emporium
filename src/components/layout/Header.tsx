@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SearchDialog } from "@/components/search/SearchDialog";
-import zaviraLogo from "@/assets/zavira-logo.png";
+import { useCart } from "@/contexts/CartContext";
 
 /**
  * Navigation links for the header
@@ -27,7 +29,9 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
+  const { items } = useCart();
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,11 +44,10 @@ export const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
             ? "bg-background/95 backdrop-blur-md border-b border-border"
             : "bg-transparent"
-        }`}
+          }`}
       >
         <nav className="container mx-auto px-4 lg:px-8">
           <div className="flex justify-between items-center h-20">
@@ -59,11 +62,14 @@ export const Header = () => {
             </Button>
 
             {/* Logo */}
-            <Link to="/" className="flex items-center justify-center flex-1 lg:flex-none">
-              <img
-                src={zaviraLogo}
+            <Link href="/" className="flex items-center justify-center flex-1 lg:flex-none">
+              <Image
+                src="/assets/zavira-logo.png"
                 alt="Zavira"
+                width={120}
+                height={32}
                 className="h-8 w-auto invert dark:invert-0"
+                priority
               />
             </Link>
 
@@ -72,10 +78,9 @@ export const Header = () => {
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
-                  to={link.href}
-                  className={`nav-link ${
-                    location.pathname === link.href ? "text-foreground" : ""
-                  }`}
+                  href={link.href}
+                  className={`nav-link ${pathname === link.href ? "text-foreground" : ""
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -84,24 +89,24 @@ export const Header = () => {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="hidden sm:flex"
                 onClick={() => setIsSearchOpen(true)}
               >
                 <Search className="h-5 w-5" />
               </Button>
-              <Link to="/auth">
+              <Link href="/auth">
                 <Button variant="ghost" size="icon">
                   <User className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/cart">
+              <Link href="/cart">
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingBag className="h-5 w-5" />
                   <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-silver text-silver-foreground text-[10px] font-bold flex items-center justify-center">
-                    0
+                    {cartCount}
                   </span>
                 </Button>
               </Link>
@@ -110,15 +115,14 @@ export const Header = () => {
 
           {/* Mobile Navigation */}
           {isMobileMenuOpen && (
-            <div className="lg:hidden py-6 border-t border-border animate-fade-in">
+            <div className="lg:hidden py-6 border-t border-border animate-fade-in bg-background">
               <div className="flex flex-col gap-4">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
-                    to={link.href}
-                    className={`nav-link py-2 ${
-                      location.pathname === link.href ? "text-foreground" : ""
-                    }`}
+                    href={link.href}
+                    className={`nav-link py-2 ${pathname === link.href ? "text-foreground" : ""
+                      }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
