@@ -1,109 +1,54 @@
-# Zavira - Product Context
+# Product Context
 
-## Why This Project Exists
+## Project Name
+Zavira's Fragrance Emporium
 
-Zavira is an emerging luxury perfume brand that needs a digital presence matching its premium positioning. The website serves as both a sales channel and a brand experience platform, allowing customers worldwide to discover and purchase exclusive fragrances.
+## Project Description
+A high-end, luxury e-commerce platform for an exclusive perfume brand. The design emphasizes minimalism, elegance, and a premium user experience ("dark mode" aesthetic with gold accents).
 
-## Problems It Solves
+## Core Philosophy
+- **User Experience**: Seamless, SPA-like transitions (Next.js), instant feedback, and high-performance.
+- **Design**: "Dark luxury" aesthetic. Minimalist but rich in texture (images, typography).
+- **Architecture**: Full-stack Next.js (React Server Components) for SEO and performance, backed by Supabase for reliability.
 
-### For Customers
+## Key Features
 
-1. **Discovery**: Explore the Zavira fragrance collection with detailed product information
-2. **Purchase**: Complete secure transactions without visiting physical stores
-3. **Brand Experience**: Immerse in the Zavira aesthetic and story
-4. **Account Management**: Track orders, manage preferences, and access exclusive offers
+### 1. Storefront
+- **Home**: Brand storytelling, featured collections, sensory imagery.
+- **Shop**: Filterable product grid (Category, Scent Profile, Price).
+- **Product Detail**: High-res imagery, scent breakdown (Top/Heart/Base notes), "Add to Cart".
+- **Collections**: curated groupings of products.
 
-### For the Business
+### 2. User Accounts
+- **Authentication**: Email/Password login (Supabase Auth).
+- **Profile**: Order history, saved addresses, wishlist.
+- **Cart**: Persistent cart (database-backed for logged-in users, local storage for guests).
 
-1. **Sales Channel**: Direct-to-consumer sales without intermediaries
-2. **Brand Control**: Full control over presentation and customer experience
-3. **Data Collection**: Customer insights for marketing and product development
-4. **Scalability**: Reach global audience without physical expansion
+### 3. Checkout & Operations
+- **Checkout Flow**: Multi-step (Shipping -> Payment -> Confirmation).
+- **Payments**: Integration with local gateways (bKash, Nagad) and standard cards (Stripe ready).
+- **Delivery**: Integration with local courier APIs (Steadfast, Pathao).
 
-## User Experience Goals
+### 4. Admin Dashboard
+- **Overview**: Sales analytics, order statuses, inventory alerts.
+- **Management**: CRUD operations for Products, Orders, Customers, Collections.
+- **Marketing**: Discount code management, Landing page content editor.
 
-### Emotional Goals
+### 5. Data Integration (New Requirement)
+- **Google Sheets Sync**: Real-time "Shadow Database" for operational visibility.
+  - **Orders Sheet**: New rows for every placed order.
+  - **Inventory Sheet**: Real-time stock level updates.
+  - **Customers Sheet**: New user registrations.
+  - **Goal**: Allow non-technical staff to view/manage operations via Sheets without accessing the Admin Dashboard.
 
-- Evoke feelings of luxury, sophistication, and exclusivity
-- Create desire through premium visual presentation
-- Build trust through professional, polished interface
-- Inspire exploration of the fragrance collection
+## Domain Model (Simplified)
 
-### Functional Goals
+- **User**: Profile, Role (Admin/Customer).
+- **Product**: Details, Pricing, Variants (Sizes), Inventory, Scent Profile.
+- **Order**: Status, Payment Status, Items, Shipping Info.
+- **Collection**: Grouping of products.
 
-- **Effortless Navigation**: Find products quickly with intuitive structure
-- **Smooth Checkout**: Complete purchases with minimal friction
-- **Responsive Experience**: Perfect presentation on all devices
-- **Fast Performance**: Quick page loads for impatient luxury consumers
-
-## User Journeys
-
-### Journey 1: Browse and Purchase
-
-```
-Homepage → Shop → Product Detail → Add to Cart → Checkout → Confirmation
-```
-
-### Journey 2: Brand Discovery
-
-```
-Homepage → Our Story → Collections → Shop → Product Detail
-```
-
-### Journey 3: Returning Customer
-
-```
-Login → Profile → Order History → Shop → Quick Checkout
-```
-
-### Journey 4: Search-Driven
-
-```
-Search → Results → Product Detail → Add to Cart
-```
-
-## Key User Personas
-
-### The Connoisseur
-
-- Appreciates fine fragrances
-- Values quality over price
-- Researches before purchasing
-- Reads product details carefully
-
-### The Gift Giver
-
-- Seeking impressive presentation
-- Needs clear product information
-- Values gift wrapping/messaging options
-- Time-sensitive purchases
-
-### The Explorer
-
-- Discovering new fragrances
-- Drawn by visual aesthetics
-- May browse without immediate purchase intent
-- Newsletter signup likely
-
-## Content Strategy
-
-### Product Information
-
-- Detailed scent profiles (top, heart, base notes)
-- Size options and pricing
-- High-quality imagery
-- Usage recommendations
-
-### Brand Story
-
-- Heritage and craftsmanship
-- Sustainability practices
-- Perfumer backgrounds
-- Manufacturing process
-
-### Support Content
-
-- FAQ for common questions
-- Shipping and returns policies
-- Contact information
-- Store locator (future)
+## Success Metrics
+1.  **Performance**: Core Web Vitals (LCP, FID, CLS) in the "Green" zone.
+2.  **Reliability**: 99.9% uptime (Vercel/Supabase SLA).
+3.  **Operational Efficiency**: Real-time sync to Google Sheets reduces manual data entry to 0.
