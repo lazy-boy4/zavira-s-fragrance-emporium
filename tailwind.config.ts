@@ -20,6 +20,8 @@ export default {
       fontFamily: {
         display: ["Playfair Display", "serif"],
         body: ["Inter", "sans-serif"],
+        "serif-display": ["Cormorant Garamond", "serif"],
+        "sans-luxury": ["Karla", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -63,6 +65,15 @@ export default {
           DEFAULT: "hsl(var(--surface))",
           foreground: "hsl(var(--surface-foreground))",
         },
+        midnight: {
+          DEFAULT: "hsl(var(--midnight))",
+          surface: "hsl(var(--midnight-surface))",
+        },
+        bronze: {
+          DEFAULT: "hsl(var(--bronze))",
+          deep: "hsl(var(--bronze-deep))",
+        },
+        ivory: "hsl(var(--ivory))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

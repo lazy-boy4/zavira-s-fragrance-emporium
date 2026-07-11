@@ -1,55 +1,80 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useReveal } from "@/hooks/useReveal";
 
+/**
+ * Newsletter — dark surface panel with hairline bronze frame and
+ * underline-only email input matching the gallery aesthetic.
+ */
 export const Newsletter = () => {
   const [email, setEmail] = useState("");
   const { toast } = useToast();
+  const { ref, cls } = useReveal(0.2);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      toast({
-        title: "Welcome to Zavira",
-        description: "Thank you for subscribing. You'll be the first to know about our exclusive launches.",
-      });
-      setEmail("");
-    }
+    if (!email) return;
+    toast({
+      title: "Welcome to Zavira",
+      description:
+        "You are now part of the inner circle. Watch your inbox for the next dispatch.",
+    });
+    setEmail("");
   };
 
   return (
-    <section className="py-24 lg:py-32 bg-foreground text-background">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-sm uppercase tracking-[0.3em] text-background/60 mb-4">
-            Stay Connected
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-medium mb-6">
-            Join the Inner Circle
-          </h2>
-          <p className="text-background/70 mb-10">
-            Be the first to discover new fragrances, exclusive offers, and behind-the-scenes access to the world of Zavira.
-          </p>
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <Input
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent border-background/30 text-background placeholder:text-background/50 focus:border-background h-14 text-center sm:text-left"
-              required
-            />
-            <Button
-              type="submit"
-              className="bg-background text-foreground hover:bg-background/90 h-14 px-8"
+    <section className="relative bg-midnight text-ivory py-32 md:py-40 px-6 md:px-12 overflow-hidden">
+      <div
+        ref={ref}
+        className={`relative max-w-3xl mx-auto ${cls}`}
+      >
+        {/* Bronze frame */}
+        <div className="relative border border-bronze-deep/50 bg-midnight-surface/50 px-8 py-16 md:px-16 md:py-20">
+          <div className="pointer-events-none absolute -top-3 -left-3 w-20 h-20 border-t border-l border-bronze/60" />
+          <div className="pointer-events-none absolute -bottom-3 -right-3 w-20 h-20 border-b border-r border-bronze/60" />
+
+          <div className="text-center">
+            <span className="font-sans-luxury text-[10px] uppercase tracking-[0.5em] text-bronze mb-6 block">
+              Correspondence
+            </span>
+            <h2 className="font-serif-display text-4xl md:text-5xl font-light leading-tight text-ivory mb-6">
+              Join the <span className="italic text-bronze">Inner Circle</span>
+            </h2>
+            <p className="font-sans-luxury text-base font-light text-ivory/60 max-w-md mx-auto mb-12">
+              Private dispatches on new compositions, atelier notes, and
+              invitations to intimate scent salons.
+            </p>
+
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-6 sm:gap-0 max-w-md mx-auto items-stretch"
             >
-              Subscribe
-            </Button>
-          </form>
-          <p className="text-xs text-background/50 mt-6">
-            By subscribing, you agree to receive marketing emails from Zavira. Unsubscribe anytime.
-          </p>
+              <input
+                type="email"
+                required
+                placeholder="your@email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 bg-transparent border-0 border-b border-bronze-deep focus:border-bronze focus:outline-none px-2 py-3 font-sans-luxury text-ivory placeholder:text-ivory/30 text-sm tracking-wide"
+              />
+              <button
+                type="submit"
+                className="group relative sm:ml-4 overflow-hidden border border-bronze px-8 py-3 transition-colors duration-500"
+              >
+                <span className="relative z-10 font-sans-luxury uppercase tracking-[0.3em] text-[11px] text-ivory group-hover:text-midnight transition-colors duration-500">
+                  Subscribe
+                </span>
+                <span
+                  aria-hidden
+                  className="absolute inset-0 bg-bronze origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                />
+              </button>
+            </form>
+
+            <p className="text-[10px] uppercase tracking-[0.3em] text-bronze-deep mt-10">
+              Unsubscribe at any time · No perfume left behind
+            </p>
+          </div>
         </div>
       </div>
     </section>

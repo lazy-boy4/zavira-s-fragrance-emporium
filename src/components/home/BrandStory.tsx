@@ -1,53 +1,57 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import productBox from "@/assets/product-box.png";
+import { useReveal } from "@/hooks/useReveal";
 
+/**
+ * BrandStory — centered manifesto pull-quote.
+ * Thin bronze gradient rule, italic serif quote, small-caps signature.
+ */
 export const BrandStory = () => {
-  return (
-    <section className="py-24 lg:py-32 bg-background">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Image */}
-          <div className="relative">
-            <div className="aspect-square overflow-hidden">
-              <img
-                src={productBox}
-                alt="Zavira packaging"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-8 -right-8 w-32 h-32 border border-border" />
-          </div>
+  const { ref, cls } = useReveal(0.25);
 
-          {/* Content */}
-          <div className="lg:pl-8">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
-              Our Heritage
-            </p>
-            <h2 className="font-display text-4xl md:text-5xl font-medium mb-8 leading-tight">
-              Crafted in<br />
-              <em className="font-normal">France</em>
-            </h2>
-            <div className="space-y-6 text-muted-foreground leading-relaxed">
-              <p>
-                Born from a passion for the extraordinary, Zavira represents the pinnacle of French perfumery. Each fragrance is a testament to centuries of artisanal tradition, reimagined for the modern connoisseur.
-              </p>
-              <p>
-                We source only the finest raw materials from around the world, blending them with precision and care in our atelier in Grasse, the heart of the perfume world.
-              </p>
-              <p>
-                The result? Fragrances that transcend time, designed for those who refuse to blend in.
-              </p>
-            </div>
-            <div className="mt-10">
-              <Link to="/story">
-                <Button variant="luxury-outline" size="lg">
-                  Discover Our Story
-                </Button>
-              </Link>
-            </div>
-          </div>
+  return (
+    <section className="relative bg-midnight text-ivory py-32 md:py-48 px-6 md:px-12 overflow-hidden">
+      {/* Ambient light leak */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[700px] w-[700px] rounded-full opacity-[0.08] blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, hsl(var(--bronze)) 0%, transparent 70%)",
+        }}
+      />
+
+      <div
+        ref={ref}
+        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center ${cls}`}
+      >
+        <div className="w-px h-24 bg-gradient-to-b from-bronze to-transparent mb-12" />
+
+        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.5em] text-bronze-deep mb-10 block">
+          The Zavira Manifesto
+        </span>
+
+        <blockquote className="font-serif-display text-3xl md:text-5xl lg:text-6xl font-light italic leading-[1.2] text-ivory max-w-3xl">
+          "Fragrance is a silent poem — a memory captured in a vessel of glass,
+          waiting for skin to give it a voice."
+        </blockquote>
+
+        <div className="mt-14 flex items-center justify-center gap-6">
+          <div className="h-px w-10 bg-bronze-deep" />
+          <span className="font-sans-luxury uppercase text-[10px] tracking-[0.4em] text-bronze">
+            Grasse · Dhaka · Paris
+          </span>
+          <div className="h-px w-10 bg-bronze-deep" />
         </div>
+
+        <Link
+          to="/story"
+          className="group mt-14 inline-flex items-center gap-4"
+        >
+          <span className="font-sans-luxury uppercase tracking-[0.3em] text-[11px] text-ivory/80 group-hover:text-bronze transition-colors">
+            Read the full manifesto
+          </span>
+          <span className="h-px w-10 bg-bronze-deep group-hover:w-20 group-hover:bg-bronze transition-all duration-500" />
+        </Link>
       </div>
     </section>
   );
