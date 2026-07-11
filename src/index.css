@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Karla:wght@300;400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -112,6 +112,16 @@
     --sidebar-border: 240 4% 16%;
     --sidebar-ring: 217 91% 60%;
   }
+
+  /* Zavira Landing — Midnight & Bronze artistic tokens */
+  :root,
+  .dark {
+    --midnight: 240 25% 4%;          /* #08080d */
+    --midnight-surface: 240 22% 9%;  /* #12121c */
+    --bronze: 33 44% 51%;            /* #b8864a */
+    --bronze-deep: 22 42% 24%;       /* #5a3a24 */
+    --ivory: 40 30% 96%;
+  }
 }
 
 @layer base {
@@ -149,6 +159,43 @@
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .animate-reveal {
+    opacity: 0;
+    animation: revealUp 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  }
+  .animate-float {
+    animation: gentleFloat 7s ease-in-out infinite;
+  }
+  .animate-slow-drift {
+    animation: slowDrift 14s ease-in-out infinite alternate;
+  }
+  .reveal-hidden { opacity: 0; transform: translateY(30px); filter: blur(8px); }
+  .reveal-shown {
+    opacity: 1; transform: translateY(0); filter: blur(0);
+    transition: opacity 1.4s cubic-bezier(0.19,1,0.22,1),
+                transform 1.4s cubic-bezier(0.19,1,0.22,1),
+                filter 1.4s cubic-bezier(0.19,1,0.22,1);
+  }
+  .delay-100 { animation-delay: 0.1s; transition-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; transition-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; transition-delay: 0.3s; }
+  .delay-500 { animation-delay: 0.5s; transition-delay: 0.5s; }
+  .delay-700 { animation-delay: 0.7s; transition-delay: 0.7s; }
+  .vertical-rl { writing-mode: vertical-rl; }
+
+  @keyframes revealUp {
+    from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes slowDrift {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
   }
 
   .animate-fade-in {
