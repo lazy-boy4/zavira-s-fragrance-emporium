@@ -61,34 +61,34 @@
   }
 
   .dark {
-    /* Zavira Luxury Dark Theme - Primary */
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
+    /* Zavira Midnight & Bronze — artistic luxury dark theme */
+    --background: 240 25% 4%;
+    --foreground: 40 30% 96%;
 
-    --card: 240 10% 7%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 22% 9%;
+    --card-foreground: 40 30% 96%;
 
-    --popover: 240 10% 7%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 22% 9%;
+    --popover-foreground: 40 30% 96%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 10% 4%;
+    --primary: 33 44% 51%;
+    --primary-foreground: 240 25% 4%;
 
-    --secondary: 240 6% 11%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 240 20% 12%;
+    --secondary-foreground: 40 30% 96%;
 
-    --muted: 240 6% 11%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 240 20% 12%;
+    --muted-foreground: 33 18% 68%;
 
-    --accent: 240 6% 11%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 240 20% 12%;
+    --accent-foreground: 40 30% 96%;
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 63% 41%;
+    --destructive-foreground: 40 30% 96%;
 
-    --border: 240 6% 17%;
-    --input: 240 6% 17%;
-    --ring: 240 5% 84%;
+    --border: 33 22% 18%;
+    --input: 33 22% 18%;
+    --ring: 33 44% 51%;
 
     /* Zavira Custom Tokens - Dark */
     --silver: 240 5% 84%;
@@ -139,6 +139,13 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+  }
+
+  /* On the artistic dark surface, headings adopt Cormorant Garamond for editorial feel */
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    @apply font-serif-display;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 }
 

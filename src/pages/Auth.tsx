@@ -125,21 +125,31 @@ const Auth = () => {
       <main className="pt-20">
         <section className="py-16 lg:py-24 bg-background">
           <div className="container mx-auto px-4 lg:px-8 max-w-md">
-            <div className="text-center mb-12">
-              <h1 className="font-display text-4xl md:text-5xl font-medium mb-4">
-                Welcome
+            <div className="text-center mb-12 animate-reveal">
+              <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-4">
+                L'Atelier Privé
+              </p>
+              <h1 className="text-5xl md:text-6xl mb-4">
+                <span className="italic">Bienvenue</span>
               </h1>
-              <p className="text-muted-foreground">
-                Sign in to your account or create a new one
+              <p className="text-muted-foreground font-sans-luxury">
+                Sign in to your account, or begin a new chapter.
               </p>
             </div>
 
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="relative bg-midnight-surface/60 border border-bronze/25 p-8 md:p-10">
+              {/* corner rules */}
+              <span aria-hidden className="absolute -top-px -left-px w-8 h-px bg-bronze" />
+              <span aria-hidden className="absolute -top-px -left-px h-8 w-px bg-bronze" />
+              <span aria-hidden className="absolute -bottom-px -right-px w-8 h-px bg-bronze" />
+              <span aria-hidden className="absolute -bottom-px -right-px h-8 w-px bg-bronze" />
+
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-8">
-                <TabsTrigger value="login" className="uppercase tracking-wider text-xs">
+                <TabsTrigger value="login" className="uppercase tracking-[0.25em] text-xs font-sans-luxury data-[state=active]:text-bronze">
                   Sign In
                 </TabsTrigger>
-                <TabsTrigger value="signup" className="uppercase tracking-wider text-xs">
+                <TabsTrigger value="signup" className="uppercase tracking-[0.25em] text-xs font-sans-luxury data-[state=active]:text-bronze">
                   Create Account
                 </TabsTrigger>
               </TabsList>
@@ -357,14 +367,15 @@ const Auth = () => {
                 </form>
               </TabsContent>
             </Tabs>
+            </div>
 
             {/* Divider */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border" />
+                <div className="w-full border-t border-bronze/20" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-4 text-muted-foreground tracking-wider">
+                <span className="bg-background px-4 text-bronze tracking-[0.3em] font-sans-luxury">
                   Or continue with
                 </span>
               </div>

@@ -86,12 +86,19 @@ const Shop = () => {
       <Header />
       <main className="pt-20">
         {/* Hero */}
-        <section className="py-16 lg:py-24 bg-card">
-          <div className="container mx-auto px-4 lg:px-8 text-center">
-            <h1 className="font-display text-4xl md:text-6xl font-medium mb-4">
-              Shop All Fragrances
+        <section className="py-20 lg:py-28 bg-midnight-surface border-b border-bronze/15 relative overflow-hidden">
+          <span aria-hidden className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 vertical-rl font-sans-luxury text-[0.65rem] tracking-[0.4em] uppercase text-bronze/60">
+            Volume II — Le Catalogue
+          </span>
+          <div className="container mx-auto px-4 lg:px-8 text-center animate-reveal">
+            <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-6">
+              La Collection
+            </p>
+            <h1 className="text-5xl md:text-7xl mb-6">
+              Shop All <span className="italic text-bronze">Fragrances</span>
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
+            <div className="w-16 h-px bg-bronze mx-auto mb-6" />
+            <p className="text-muted-foreground max-w-xl mx-auto font-sans-luxury">
               Explore our curated collection of luxury perfumes, each crafted to evoke a unique sensory experience.
             </p>
           </div>
@@ -101,7 +108,7 @@ const Shop = () => {
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4 lg:px-8">
             {/* Filters */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-12 pb-8 border-b border-border">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-12 pb-8 border-b border-bronze/15">
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <Button
@@ -109,12 +116,13 @@ const Shop = () => {
                     variant={activeCategory === category ? "luxury" : "luxury-outline"}
                     size="sm"
                     onClick={() => setActiveCategory(category)}
+                    className="font-sans-luxury tracking-[0.2em]"
                   >
                     {category}
                   </Button>
                 ))}
               </div>
-              <Button variant="ghost" size="sm" className="gap-2">
+              <Button variant="ghost" size="sm" className="gap-2 text-bronze hover:text-bronze font-sans-luxury tracking-[0.2em]">
                 <SlidersHorizontal className="h-4 w-4" />
                 Filter
               </Button>
@@ -128,25 +136,30 @@ const Shop = () => {
                   to={`/product/${product.slug}`}
                   className="group"
                 >
-                  <div className="relative aspect-[3/4] mb-6 overflow-hidden bg-card">
+                  <div className="relative aspect-[3/4] mb-6 overflow-hidden bg-midnight-surface">
+                    {/* hairline bronze corner rules */}
+                    <span aria-hidden className="absolute top-0 left-0 w-6 h-px bg-bronze/60 z-10" />
+                    <span aria-hidden className="absolute top-0 left-0 h-6 w-px bg-bronze/60 z-10" />
+                    <span aria-hidden className="absolute bottom-0 right-0 w-6 h-px bg-bronze/60 z-10" />
+                    <span aria-hidden className="absolute bottom-0 right-0 h-6 w-px bg-bronze/60 z-10" />
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors duration-300" />
+                    <div className="absolute inset-0 bg-midnight/0 group-hover:bg-midnight/20 transition-colors duration-500" />
                   </div>
                   <div className="text-center">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">
+                    <p className="text-[0.65rem] font-sans-luxury uppercase tracking-[0.3em] text-bronze mb-3">
                       {product.category}
                     </p>
-                    <h3 className="font-display text-xl font-medium mb-1 group-hover:text-muted-foreground transition-colors">
+                    <h3 className="text-2xl mb-1 group-hover:text-bronze transition-colors">
                       {product.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-2">
+                    <p className="text-sm text-muted-foreground mb-2 font-sans-luxury">
                       {product.size}
                     </p>
-                    <p className="font-medium text-lg">${product.price}.00</p>
+                    <p className="font-serif-display italic text-lg text-bronze">${product.price}.00</p>
                   </div>
                 </Link>
               ))}

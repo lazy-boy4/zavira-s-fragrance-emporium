@@ -19,14 +19,15 @@ const Story = () => {
             />
             <div className="absolute inset-0 bg-background/80" />
           </div>
-          <div className="relative container mx-auto px-4 lg:px-8 text-center">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          <div className="relative container mx-auto px-4 lg:px-8 text-center animate-reveal">
+            <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-6">
               Our Heritage
             </p>
-            <h1 className="font-display text-5xl md:text-7xl font-medium mb-6">
-              The Zavira Story
+            <h1 className="text-6xl md:text-8xl mb-6">
+              The Zavira <span className="italic text-bronze">Story</span>
             </h1>
-            <p className="text-xl text-muted-foreground font-display italic">
+            <div className="w-16 h-px bg-bronze mx-auto mb-6" />
+            <p className="text-xl text-muted-foreground font-serif-display italic">
               L'âme de la Nuit — The Soul of the Night
             </p>
           </div>

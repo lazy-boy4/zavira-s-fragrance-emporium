@@ -1,71 +1,85 @@
-# Zavira Landing Page — Artistic Gallery Motion Redesign
+# Extend Midnight & Bronze Redesign Site-Wide
 
-Rebuild the public landing page (`/`) with the chosen direction. Keep dark luxury essence, add artistic zigzag composition, sculptural framing, and cinematic reveal motion. Palette, fonts, and layout are locked from the visual picks.
-
-## Locked design tokens
-
-- Palette: `#08080d` (background), `#12121c` (surface), `#5a3a24` (bronze deep), `#b8864a` (bronze accent), plus off-white for foreground text.
-- Typography: Cormorant Garamond (display, italic emphasis), Karla (body, wide-tracked eyebrows).
-- Layout: alternating zigzag bands, oversized italic headlines, hairline bronze frames, vertical side-labels, index numerals.
-- Motion: slow cubic-bezier reveals (`fadeInUp` + blur), 6s float on framed images, staggered delays, hover underline/scale on links and image plinths.
+Propagate the landing page's artistic gallery aesthetic (Midnight & Bronze palette, Cormorant Garamond × Karla type, zigzag/asymmetric composition, cinematic reveal motion) across every public-facing page. Admin panel stays untouched.
 
 ## Scope
 
-Only the public-facing landing page and its sections. Admin, cart, checkout, product pages untouched. Header/Footer keep structure but adopt the new type/palette tokens so they don't clash.
+**In scope (public pages):**
+- `src/pages/Shop.tsx`, `Collections.tsx`, `ProductDetail.tsx`
+- `src/pages/Story.tsx`, `Craftsmanship.tsx`, `Sustainability.tsx`, `Careers.tsx`, `Contact.tsx`, `StoreLocator.tsx`
+- `src/pages/FAQ.tsx`, `ShippingReturns.tsx`, `PrivacyPolicy.tsx`, `TermsOfService.tsx`
+- `src/pages/Auth.tsx`, `Cart.tsx`, `CheckoutShipping.tsx`, `CheckoutPayment.tsx`, `OrderConfirmation.tsx`, `Profile.tsx`, `NotFound.tsx`
+- `src/components/layout/Header.tsx`, `Footer.tsx` (deeper pass than the landing-only retouch)
+- `src/components/search/SearchDialog.tsx`
 
-## Files to change
+**Out of scope:**
+- Anything under `src/pages/admin/**` and `src/components/admin/**`
+- Data hooks, contexts, business logic, backend
+- New assets (reuse existing imagery)
 
-1. `src/index.css`
-   - Add Cormorant Garamond + Karla to the Google Fonts import (keep existing fonts for admin/rest of site working; Playfair/Inter stay for admin).
-   - Add new dark-luxury tokens on `.dark`: `--bronze`, `--bronze-deep`, `--midnight`, `--midnight-surface`, refined `--foreground`/`--muted-foreground` for the landing tone.
-   - Add keyframes: `fadeInUp` (with blur), `float`, `drawLine`, `slowZoom`. Add `.animate-reveal`, `.animate-float`, `.delay-1/2/3/4` utilities.
+## Design system reuse
 
-2. `tailwind.config.ts`
-   - Register `bronze` / `bronze-deep` / `midnight` color tokens (HSL bound to CSS vars).
-   - Add font families `serif-display: Cormorant Garamond` and `sans-luxury: Karla` (kept alongside existing `display`/`body` so admin is unaffected).
+No new tokens. Everything already exists in `src/index.css` + `tailwind.config.ts`:
+- Palette: `bg-midnight`, `bg-midnight-surface`, `text-bronze`, `text-bronze-deep`, `text-ivory`, `border-bronze/30`
+- Type: `font-serif-display` (headings, italic accents), `font-sans-luxury` (body, wide-tracked eyebrows)
+- Motion: `useReveal` hook + `reveal-hidden`/`reveal-shown`, `animate-reveal`, `animate-float`, `delay-100/200/300/500/700`, `vertical-rl`
 
-3. `src/components/home/Hero.tsx` — rebuild
-   - Asymmetric 12-col grid: framed floating product image left (with `-top/-left` bronze corner rule and offset `#12121c` backdrop card), content right.
-   - Eyebrow "Volume I — L'Atelier" in Karla wide tracking bronze-deep.
-   - Headline "ZAVIRA" + italic bronze "Cinétique" in Cormorant, staggered `animate-reveal`.
-   - Body paragraph, primary CTA button with bronze fill sweep on hover, meta grid (Notes / Vibe).
-   - Vertical side label "Essence of Midnight" rotated 90° at right edge (lg+).
-   - Image slot uses existing `heroPerfume` asset via `<img>` inside the framed container with `animate-float`.
+Every public page wraps in `<div className="dark min-h-screen bg-midnight text-ivory">` to guarantee the palette.
 
-4. `src/components/home/FeaturedProducts.tsx` — restyle as zigzag gallery
-   - Convert current grid into 3 alternating full-bleed bands (image left / right / left).
-   - Each band: index numeral `01` / `02` / `03` in oversized ghosted Cormorant, italic bronze accent word in title, hairline bronze rule that expands on hover of the CTA link, slow-zoom image on hover.
+## Page-by-page moves
 
-5. `src/components/home/BrandStory.tsx` — restyle
-   - Centered manifesto pull-quote in italic Cormorant, thin vertical bronze gradient line above, small-caps signature below (`— The Zavira Manifesto`), reveal on scroll.
+**Header/Footer (deeper pass)**
+- Header: transparent over midnight, hairline bronze bottom rule when scrolled, Karla wide-tracked nav links, bronze underline on hover/active.
+- Footer: midnight-surface band, bronze section headings in Karla small-caps, italic Cormorant brand mark, hairline bronze dividers.
 
-6. `src/components/home/Newsletter.tsx` — restyle
-   - Dark surface band with hairline bronze frame, italic Cormorant heading, Karla body, input with underline-only bronze border, CTA matching hero style.
+**Shop / Collections**
+- Editorial header: eyebrow ("Volume II — Le Catalogue"), oversized italic Cormorant title with bronze accent word, hairline rule.
+- Product grid → asymmetric card grid on framed plinths (hairline bronze corner rules, slow-zoom on hover, italic price in bronze).
+- Filter/sort bar: minimal, underline-only controls, Karla labels.
 
-7. `src/components/layout/Header.tsx` — light retouch only
-   - Swap nav link tracking + color to match new palette; add subtle bottom-fade separator; keep component structure.
+**ProductDetail**
+- Two-column asymmetric: framed floating image (animate-float) left, content right with vertical side label, staggered reveal.
+- Notes/details in Karla wide-tracking, italic Cormorant price, bronze CTA with fill sweep.
 
-8. `src/components/layout/Footer.tsx` — light retouch only
-   - Adopt new tokens (bronze accents on headings, Karla eyebrows). No structural change.
+**Story / Craftsmanship / Sustainability / Careers**
+- Zigzag manifesto bands (image/text alternating), index numerals (`01`, `02`…) as ghosted Cormorant, italic bronze accent words, reveal on scroll.
+- Pull-quote sections mirror BrandStory pattern.
 
-9. `src/pages/Index.tsx`
-   - No structural change; ensures section order is Hero → FeaturedProducts (zigzag) → BrandStory → Newsletter. Confirm `dark` class stays.
+**Contact / StoreLocator**
+- Split layout: editorial intro left, form/map right inside hairline bronze frame. Underline-only inputs matching Newsletter.
 
-## Motion budget (intensity 4/5)
+**FAQ / ShippingReturns / PrivacyPolicy / TermsOfService**
+- Editorial single-column: eyebrow + italic display title, bronze section rules, Cormorant question headings, Karla body. Legal pages get a subtle bronze index rail.
 
-- Hero: staggered reveal on load (eyebrow → headline → body → CTA/meta) with 0.2s stepped delays, blur-to-clear.
-- Image plinths: 6s ease-in-out floating drift; hover scales 1→1.03 with 700ms cubic-bezier.
-- Zigzag sections: `IntersectionObserver` (via one small hook `useReveal`) toggles `.animate-reveal` when the band enters viewport — avoids replaying on scroll-back and gives cinematic feel.
-- Link chevrons: 12px→20px hairline expansion on hover.
-- No bouncy easing anywhere.
+**Auth**
+- Centered midnight-surface card with hairline bronze frame, italic Cormorant heading, underline inputs, bronze CTA. Two tabs styled as small-caps Karla with bronze underline for active.
 
-## Verification
+**Cart / Checkout (Shipping, Payment) / OrderConfirmation**
+- Dark surface panels, bronze section dividers, italic totals in Cormorant, underline inputs, bronze primary CTAs. Checkout steps as small-caps Karla with bronze index numerals.
 
-- `bun run build` (via harness) — clean typecheck.
-- Playwright: navigate `/`, screenshot desktop (1280) and mobile (390), confirm hero framed image, zigzag alternation, italic bronze accents, staggered reveal completed.
-- Confirm no admin pages broke by loading `/admin` and checking header/nav still render.
+**Profile**
+- Sidebar-style nav in Karla small-caps with bronze active indicator, content in framed midnight-surface panels.
+
+**NotFound**
+- Oversized italic "404" in Cormorant with bronze glow, Karla eyebrow, single bronze CTA back home.
+
+**SearchDialog**
+- Midnight-surface panel, bronze hairline frame, Karla input, italic result titles.
+
+## Motion budget
+
+Same as landing: staggered `useReveal` on section entry, 6s float on hero/product images, 700ms cubic-bezier hover scales, hairline expansion on link hover. No new keyframes.
+
+## Technical notes
+
+- Only presentation code changes. No hooks, contexts, routes, or data logic touched.
+- Only `text-*`/`bg-*` semantic token classes — no hex, no `text-white`/`bg-black`.
+- Reuse existing components (Button, Input, Card) with new wrapper classes rather than forking variants.
+- Verify with a Playwright pass across `/shop`, `/collections`, `/story`, `/auth`, `/cart`, `/contact`, `/faq`, and `/404` on desktop + mobile, plus a smoke check on `/admin` to confirm no regression.
 
 ## Out of scope
 
-- No changes to admin panel, product catalog logic, cart, or backend hooks.
-- No new assets generated; reuse existing `heroPerfume` and product images. If additional imagery is required later, that's a follow-up.
+- Admin panel styling
+- New imagery, icons, or assets
+- Copywriting rewrites beyond eyebrows/section labels
+- Any backend, data, or routing change

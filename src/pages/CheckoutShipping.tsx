@@ -45,7 +45,7 @@ const CheckoutShipping = () => {
   const subtotal = getSubtotal();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background">
       {/* Minimal Header */}
       <header className="border-b border-border">
         <div className="container mx-auto px-4 py-4">
