@@ -117,27 +117,31 @@ const ProductDetail = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
               {/* Image */}
-              <div className="aspect-square bg-card overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
+              <div className="relative">
+                <div className="absolute -top-6 -left-6 w-24 h-24 border-t border-l border-bronze/60 pointer-events-none" />
+                <div className="absolute -bottom-6 -right-6 w-24 h-24 border-b border-r border-bronze/60 pointer-events-none" />
+                <div className="aspect-square bg-midnight-surface overflow-hidden animate-float">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
 
               {/* Details */}
-              <div className="flex flex-col justify-center">
-                <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">
+              <div className="flex flex-col justify-center animate-reveal">
+                <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-3">
                   {product.subtitle}
                 </p>
-                <h1 className="font-display text-4xl md:text-5xl font-medium mb-4">
-                  {product.name}
+                <h1 className="text-5xl md:text-6xl mb-4">
+                  <span className="italic">{product.name}</span>
                 </h1>
-                <p className="text-2xl font-medium mb-8">
+                <p className="font-serif-display italic text-3xl text-bronze mb-8">
                   ${product.sizes[selectedSize].price}.00
                 </p>
 
-                <p className="text-muted-foreground mb-8 leading-relaxed">
+                <p className="text-muted-foreground mb-8 leading-relaxed font-sans-luxury">
                   {product.description}
                 </p>
 

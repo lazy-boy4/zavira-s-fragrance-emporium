@@ -43,15 +43,16 @@ const Collections = () => {
       <Header />
       <main className="pt-20">
         {/* Hero */}
-        <section className="py-16 lg:py-24 bg-card">
-          <div className="container mx-auto px-4 lg:px-8 text-center">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
-              Curated for You
+        <section className="py-20 lg:py-28 bg-midnight-surface border-b border-bronze/15">
+          <div className="container mx-auto px-4 lg:px-8 text-center animate-reveal">
+            <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-6">
+              Curated for the Discerning
             </p>
-            <h1 className="font-display text-4xl md:text-6xl font-medium mb-4">
-              Our Collections
+            <h1 className="text-5xl md:text-7xl mb-6">
+              Our <span className="italic text-bronze">Collections</span>
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto">
+            <div className="w-16 h-px bg-bronze mx-auto mb-6" />
+            <p className="text-muted-foreground max-w-xl mx-auto font-sans-luxury">
               Each collection tells a unique story, crafted to evoke distinct emotions and memories.
             </p>
           </div>
@@ -65,22 +66,22 @@ const Collections = () => {
                 <Link
                   key={collection.id}
                   to={`/shop?collection=${collection.slug}`}
-                  className="group relative aspect-[4/5] overflow-hidden"
+                  className="group relative aspect-[4/5] overflow-hidden border border-bronze/15"
                 >
                   <img
                     src={collection.image}
                     alt={collection.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">
+                    <p className="text-[0.65rem] font-sans-luxury uppercase tracking-[0.3em] text-bronze mb-3">
                       Collection {String(index + 1).padStart(2, "0")}
                     </p>
-                    <h2 className="font-display text-3xl md:text-4xl font-medium mb-3 group-hover:text-silver transition-colors">
-                      {collection.name}
+                    <h2 className="text-4xl md:text-5xl mb-3 group-hover:text-bronze transition-colors">
+                      <span className="italic">{collection.name}</span>
                     </h2>
-                    <p className="text-muted-foreground max-w-sm">
+                    <p className="text-muted-foreground max-w-sm font-sans-luxury">
                       {collection.description}
                     </p>
                   </div>
