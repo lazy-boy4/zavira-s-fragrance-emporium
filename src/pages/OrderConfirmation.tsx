@@ -34,7 +34,7 @@ const OrderConfirmation = () => {
   const total = subtotal + shipping + tax;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background">
       <Header />
       
       <main className="pt-20">
