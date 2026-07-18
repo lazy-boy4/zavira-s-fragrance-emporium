@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import productPrimal from "@/assets/product-primal.jpg";
 import productMidnight from "@/assets/product-midnight.jpg";
 import productEssence from "@/assets/product-essence.jpg";
@@ -73,13 +74,51 @@ const products = [
 ];
 
 const categories = ["All", "For Him", "For Her", "Unisex"];
+const sortOptions = [
+  { value: "featured", label: "Featured" },
+  { value: "price-asc", label: "Price · Low to High" },
+  { value: "price-desc", label: "Price · High to Low" },
+  { value: "name-asc", label: "Name · A to Z" },
+] as const;
+
+const PRICE_MIN = 100;
+const PRICE_MAX = 200;
+
+const numberWords = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
 
 const Shop = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeCategory = searchParams.get("category") ?? "All";
+  const sort = searchParams.get("sort") ?? "featured";
+  const min = Number(searchParams.get("min") ?? PRICE_MIN);
+  const max = Number(searchParams.get("max") ?? PRICE_MAX);
 
-  const filteredProducts = activeCategory === "All"
-    ? products
-    : products.filter((p) => p.category === activeCategory);
+  const setParam = (key: string, value: string | null) => {
+    const next = new URLSearchParams(searchParams);
+    if (value === null || value === "" || value === "All" || value === "featured") {
+      next.delete(key);
+    } else {
+      next.set(key, value);
+    }
+    setSearchParams(next, { replace: true });
+  };
+
+  const filteredProducts = useMemo(() => {
+    let list = products.filter((p) => p.price >= min && p.price <= max);
+    if (activeCategory !== "All") list = list.filter((p) => p.category === activeCategory);
+    switch (sort) {
+      case "price-asc": list = [...list].sort((a, b) => a.price - b.price); break;
+      case "price-desc": list = [...list].sort((a, b) => b.price - a.price); break;
+      case "name-asc": list = [...list].sort((a, b) => a.name.localeCompare(b.name)); break;
+      default: break;
+    }
+    return list;
+  }, [activeCategory, sort, min, max]);
+
+  const resetFilters = () => setSearchParams({}, { replace: true });
+  const countWord = filteredProducts.length < numberWords.length
+    ? numberWords[filteredProducts.length]
+    : String(filteredProducts.length);
 
   return (
     <div className="min-h-screen dark">
@@ -107,28 +146,104 @@ const Shop = () => {
         {/* Filters & Products */}
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4 lg:px-8">
-            {/* Filters */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-12 pb-8 border-b border-bronze/15">
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <Button
-                    key={category}
-                    variant={activeCategory === category ? "luxury" : "luxury-outline"}
-                    size="sm"
-                    onClick={() => setActiveCategory(category)}
-                    className="font-sans-luxury tracking-[0.2em]"
-                  >
-                    {category}
-                  </Button>
-                ))}
+            {/* Filters — hairline bronze editorial bar */}
+            <div className="mb-12 border border-bronze/20 bg-midnight-surface/50 p-6 lg:p-8">
+              <div className="grid gap-8 lg:grid-cols-3">
+                {/* Collection chips */}
+                <div>
+                  <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze mb-3">
+                    Family
+                  </p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-2">
+                    {categories.map((category) => {
+                      const active = activeCategory === category;
+                      return (
+                        <button
+                          key={category}
+                          type="button"
+                          onClick={() => setParam("category", category)}
+                          className={`relative font-sans-luxury text-xs uppercase tracking-[0.2em] pb-1 transition-colors ${
+                            active ? "text-bronze" : "text-ivory/60 hover:text-ivory"
+                          }`}
+                        >
+                          {category}
+                          {active && <span aria-hidden className="absolute left-0 right-0 -bottom-px h-px bg-bronze" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Price */}
+                <div>
+                  <div className="flex items-baseline justify-between mb-3">
+                    <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze">Price</p>
+                    <p className="font-serif-display italic text-sm text-ivory/80">
+                      ${min} — ${max}
+                    </p>
+                  </div>
+                  <Slider
+                    value={[min, max]}
+                    min={PRICE_MIN}
+                    max={PRICE_MAX}
+                    step={5}
+                    onValueChange={([lo, hi]) => {
+                      const next = new URLSearchParams(searchParams);
+                      if (lo === PRICE_MIN) next.delete("min"); else next.set("min", String(lo));
+                      if (hi === PRICE_MAX) next.delete("max"); else next.set("max", String(hi));
+                      setSearchParams(next, { replace: true });
+                    }}
+                    className="[&_[role=slider]]:border-bronze"
+                  />
+                </div>
+
+                {/* Sort */}
+                <div>
+                  <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze mb-3">
+                    Arrange
+                  </p>
+                  <Select value={sort} onValueChange={(v) => setParam("sort", v)}>
+                    <SelectTrigger className="bg-transparent border-0 border-b border-bronze/40 rounded-none px-0 font-sans-luxury text-xs uppercase tracking-[0.2em] focus:ring-0 focus:border-bronze">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sortOptions.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <Button variant="ghost" size="sm" className="gap-2 text-bronze hover:text-bronze font-sans-luxury tracking-[0.2em]">
-                <SlidersHorizontal className="h-4 w-4" />
-                Filter
-              </Button>
+
+              <div className="flex items-center justify-between pt-6 mt-6 border-t border-bronze/15">
+                <p className="font-serif-display italic text-sm text-ivory/70">
+                  {countWord} composition{filteredProducts.length === 1 ? "" : "s"}
+                </p>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze hover:text-ivory transition-colors"
+                >
+                  Reset
+                </button>
+              </div>
             </div>
 
             {/* Products Grid */}
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-24 border border-bronze/15 bg-midnight-surface/30">
+                <p className="font-serif-display italic text-2xl text-ivory/80 mb-4">
+                  No compositions match this arrangement.
+                </p>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="font-sans-luxury text-xs uppercase tracking-[0.3em] text-bronze hover:text-ivory transition-colors"
+                >
+                  Clear filters
+                </button>
+              </div>
+            ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
               {filteredProducts.map((product) => (
                 <Link
@@ -164,6 +279,7 @@ const Shop = () => {
                 </Link>
               ))}
             </div>
+            )}
           </div>
         </section>
       </main>
