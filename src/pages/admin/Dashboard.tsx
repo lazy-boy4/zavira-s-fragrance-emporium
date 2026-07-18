@@ -82,9 +82,15 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-display tracking-wider">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">
-          Welcome back. Here's what's happening with your store.
+        <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.35em] text-bronze mb-2">
+          Volume — Commerce
+        </p>
+        <h1 className="font-serif-display text-3xl md:text-4xl">
+          The <span className="italic text-bronze">Atelier</span> Overview
+        </h1>
+        <div className="w-12 h-px bg-bronze/60 mt-3" />
+        <p className="text-muted-foreground mt-4 font-sans-luxury">
+          A quiet pulse of the maison. Today's essence, in numbers.
         </p>
       </div>
 
