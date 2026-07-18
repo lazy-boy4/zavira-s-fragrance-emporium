@@ -82,23 +82,23 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-card border-r border-border transition-all duration-300 flex flex-col",
+        "fixed left-0 top-0 z-40 h-screen bg-midnight-surface border-r border-bronze/20 transition-all duration-300 flex flex-col",
         collapsed ? "w-16" : "w-64"
       )}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-border">
+      <div className="flex h-16 items-center justify-between px-4 border-b border-bronze/20">
         {!collapsed && (
           <NavLink to="/admin" className="flex items-center gap-2">
-            <img src={zaviraLogo} alt="Zavira" className="h-8 w-auto invert dark:invert-0" />
-            <span className="font-display text-lg tracking-wider">ADMIN</span>
+            <img src={zaviraLogo} alt="Zavira" className="h-8 w-auto" />
+            <span className="font-serif-display italic text-lg text-bronze">Atelier</span>
           </NavLink>
         )}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setCollapsed(!collapsed)}
-          className="ml-auto"
+          className="ml-auto text-bronze hover:text-bronze hover:bg-bronze/10"
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
@@ -111,10 +111,10 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
             key={item.path}
             to={item.path}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm transition-colors",
+              "relative flex items-center gap-3 px-3 py-2.5 text-xs font-sans-luxury uppercase tracking-[0.2em] transition-colors",
               isActive(item.path)
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                ? "text-bronze before:absolute before:left-0 before:top-2 before:bottom-2 before:w-px before:bg-bronze"
+                : "text-ivory/60 hover:text-bronze"
             )}
           >
             <item.icon className="h-5 w-5 flex-shrink-0" />
@@ -124,10 +124,10 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
       </nav>
 
       {/* Footer - Fix for overlap on smaller screens */}
-      <div className="mt-auto p-2 border-t border-border">
+      <div className="mt-auto p-2 border-t border-bronze/20">
         <NavLink
           to="/"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          className="flex items-center gap-3 px-3 py-2.5 text-xs font-sans-luxury uppercase tracking-[0.2em] text-ivory/60 hover:text-bronze transition-colors"
         >
           <LogOut className="h-5 w-5 flex-shrink-0" />
           {!collapsed && <span>Back to Store</span>}
