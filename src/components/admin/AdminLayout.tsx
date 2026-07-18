@@ -24,7 +24,7 @@ export default function AdminLayout() {
   const userRole: "owner" | "manager" | "staff" = "owner";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="dark min-h-screen bg-midnight text-ivory">
       {/* Sidebar */}
       <AdminSidebar userRole={userRole} />
 

@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import productPrimal from "@/assets/product-primal.jpg";
 import productMidnight from "@/assets/product-midnight.jpg";
 import productEssence from "@/assets/product-essence.jpg";
@@ -38,6 +40,22 @@ const collections = [
 ];
 
 const Collections = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sort = searchParams.get("sort") ?? "featured";
+
+  const sorted = useMemo(() => {
+    const list = [...collections];
+    if (sort === "name-asc") list.sort((a, b) => a.name.localeCompare(b.name));
+    if (sort === "name-desc") list.sort((a, b) => b.name.localeCompare(a.name));
+    return list;
+  }, [sort]);
+
+  const onSort = (v: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (v === "featured") next.delete("sort"); else next.set("sort", v);
+    setSearchParams(next, { replace: true });
+  };
+
   return (
     <div className="min-h-screen dark">
       <Header />
@@ -61,8 +79,26 @@ const Collections = () => {
         {/* Collections */}
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4 lg:px-8">
+            <div className="flex items-center justify-between mb-10 pb-4 border-b border-bronze/15">
+              <p className="font-serif-display italic text-sm text-ivory/70">
+                Four compositions
+              </p>
+              <div className="flex items-center gap-4">
+                <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze">Arrange</p>
+                <Select value={sort} onValueChange={onSort}>
+                  <SelectTrigger className="w-[180px] bg-transparent border-0 border-b border-bronze/40 rounded-none px-0 font-sans-luxury text-xs uppercase tracking-[0.2em] focus:ring-0 focus:border-bronze">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="featured">Featured</SelectItem>
+                    <SelectItem value="name-asc">Name · A to Z</SelectItem>
+                    <SelectItem value="name-desc">Name · Z to A</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {collections.map((collection, index) => (
+              {sorted.map((collection, index) => (
                 <Link
                   key={collection.id}
                   to={`/shop?collection=${collection.slug}`}

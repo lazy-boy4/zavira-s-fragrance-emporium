@@ -46,7 +46,7 @@ export default function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-card border-b border-border flex items-center justify-between px-4 lg:px-6">
+    <header className="sticky top-0 z-30 h-16 bg-midnight/80 backdrop-blur-md border-b border-bronze/20 flex items-center justify-between px-4 lg:px-6">
       {/* Mobile menu toggle */}
       <Button
         variant="ghost"

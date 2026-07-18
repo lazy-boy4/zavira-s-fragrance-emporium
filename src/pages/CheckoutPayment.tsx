@@ -82,20 +82,20 @@ const CheckoutPayment = () => {
 
       <main className="container mx-auto px-4 py-8 lg:py-12">
         {/* Progress Steps */}
-        <nav className="flex items-center justify-center gap-4 mb-12" aria-label="Checkout progress">
+        <nav className="flex items-center justify-center gap-4 mb-12 animate-reveal" aria-label="Checkout progress">
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full border border-muted-foreground text-muted-foreground flex items-center justify-center text-xs">01</span>
-            <span className="text-sm tracking-wide text-muted-foreground">SHIPPING</span>
+            <span className="w-8 h-8 rounded-full border border-bronze/40 text-bronze/60 flex items-center justify-center font-serif-display italic text-sm">1</span>
+            <span className="text-xs font-sans-luxury tracking-[0.25em] text-ivory/50 uppercase">Shipping</span>
           </div>
-          <div className="w-12 h-px bg-border" aria-hidden="true" />
+          <div className="w-12 h-px bg-bronze/40" aria-hidden="true" />
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-foreground text-background flex items-center justify-center text-xs font-medium">02</span>
-            <span className="text-sm font-medium tracking-wide">PAYMENT</span>
+            <span className="w-8 h-8 rounded-full border border-bronze bg-bronze/10 text-bronze flex items-center justify-center font-serif-display italic text-sm">2</span>
+            <span className="text-xs font-sans-luxury tracking-[0.25em] text-bronze uppercase">Payment</span>
           </div>
-          <div className="w-12 h-px bg-border" aria-hidden="true" />
+          <div className="w-12 h-px bg-bronze/20" aria-hidden="true" />
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full border border-border text-muted-foreground flex items-center justify-center text-xs">03</span>
-            <span className="text-sm tracking-wide text-muted-foreground">CONFIRM</span>
+            <span className="w-8 h-8 rounded-full border border-bronze/30 text-ivory/40 flex items-center justify-center font-serif-display italic text-sm">3</span>
+            <span className="text-xs font-sans-luxury tracking-[0.25em] text-ivory/40 uppercase">Confirm</span>
           </div>
         </nav>
 
