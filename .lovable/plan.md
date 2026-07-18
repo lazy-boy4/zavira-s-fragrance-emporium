@@ -1,85 +1,67 @@
-# Extend Midnight & Bronze Redesign Site-Wide
+# Admin Redesign + Shop Filters + Checkout Polish
 
-Propagate the landing page's artistic gallery aesthetic (Midnight & Bronze palette, Cormorant Garamond × Karla type, zigzag/asymmetric composition, cinematic reveal motion) across every public-facing page. Admin panel stays untouched.
+Three focused passes, all presentation-only. No data, routing, or auth changes.
 
-## Scope
+## 1. Admin: Midnight & Bronze skin (role nav unchanged)
 
-**In scope (public pages):**
-- `src/pages/Shop.tsx`, `Collections.tsx`, `ProductDetail.tsx`
-- `src/pages/Story.tsx`, `Craftsmanship.tsx`, `Sustainability.tsx`, `Careers.tsx`, `Contact.tsx`, `StoreLocator.tsx`
-- `src/pages/FAQ.tsx`, `ShippingReturns.tsx`, `PrivacyPolicy.tsx`, `TermsOfService.tsx`
-- `src/pages/Auth.tsx`, `Cart.tsx`, `CheckoutShipping.tsx`, `CheckoutPayment.tsx`, `OrderConfirmation.tsx`, `Profile.tsx`, `NotFound.tsx`
-- `src/components/layout/Header.tsx`, `Footer.tsx` (deeper pass than the landing-only retouch)
-- `src/components/search/SearchDialog.tsx`
+Keep every route, permission, and `AdminSidebar` role filter exactly as-is. Only visuals change.
 
-**Out of scope:**
-- Anything under `src/pages/admin/**` and `src/components/admin/**`
-- Data hooks, contexts, business logic, backend
-- New assets (reuse existing imagery)
+- **AdminLayout**: wrap in `<div className="dark ...">` so admin inherits the same midnight tokens as the storefront. Background `bg-midnight`, text `text-ivory`.
+- **AdminSidebar**: `bg-midnight-surface`, hairline `border-bronze/20` right edge, Karla wide-tracked labels (`font-sans-luxury tracking-[0.2em] text-xs uppercase`), bronze active state (bronze left rule + `text-bronze` instead of solid primary block). Logo wordmark in italic Cormorant. Collapse chevron in bronze.
+- **AdminHeader**: transparent over midnight, hairline bronze bottom rule, Karla search input with underline-only styling.
+- **Page chrome pass** (Dashboard, Products, Orders, Customers, Discounts, Analytics, Landing Page, Content, Shipping, Delivery, Payments, Team, Settings, Help):
+  - Page titles: swap `font-display tracking-wider` → italic Cormorant with a small bronze eyebrow (e.g. `Volume — Commerce`).
+  - Cards: `bg-midnight-surface border border-bronze/15`, bronze hairline dividers, italic Cormorant for KPI numbers.
+  - Tables: bronze header rules, muted row separators, italic price cells.
+  - Buttons: primary already maps to bronze via token; verify contrast, tune hover to bronze-deep sweep.
+  - Charts (Analytics): keep existing `--chart-*` tokens — they already read well on midnight.
+- **Guardrail**: no logic edits in admin pages. Only className changes and eyebrow/label text tweaks.
 
-## Design system reuse
+## 2. Shop + Collections: filters & sorting
 
-No new tokens. Everything already exists in `src/index.css` + `tailwind.config.ts`:
-- Palette: `bg-midnight`, `bg-midnight-surface`, `text-bronze`, `text-bronze-deep`, `text-ivory`, `border-bronze/30`
-- Type: `font-serif-display` (headings, italic accents), `font-sans-luxury` (body, wide-tracked eyebrows)
-- Motion: `useReveal` hook + `reveal-hidden`/`reveal-shown`, `animate-reveal`, `animate-float`, `delay-100/200/300/500/700`, `vertical-rl`
+Client-side only, operating on the existing mock arrays in `Shop.tsx` and `Collections.tsx`. Backend swap remains a one-line change later.
 
-Every public page wraps in `<div className="dark min-h-screen bg-midnight text-ivory">` to guarantee the palette.
+- **Shop filter bar** (sticky under editorial header, hairline bronze frame):
+  - Collection (Noir / Elixir / Rose / Amber / All) — chip row, bronze underline for active.
+  - Price range — dual slider, bronze track.
+  - Fragrance family (if present in product data; otherwise skip cleanly).
+  - Sort: Featured, Price ↑, Price ↓, Newest — Karla small-caps dropdown, underline-only.
+  - Results count in italic Cormorant ("Twelve compositions").
+  - Empty state: italic "No compositions match" + reset link.
+- **Collections page**: add the same sort control (Featured / A–Z / Newest) above the 2-col grid. Filtering is less relevant here (only 4 collections), so filters are Shop-only.
+- **URL sync**: reflect filters in `?collection=&sort=&min=&max=` via `useSearchParams` so the existing `/shop?collection=noir` deep links keep working.
+- **State**: local `useState` + `useMemo` derived list. No context, no new hooks.
 
-## Page-by-page moves
+## 3. Cart + Checkout: luxury motion & loading states
 
-**Header/Footer (deeper pass)**
-- Header: transparent over midnight, hairline bronze bottom rule when scrolled, Karla wide-tracked nav links, bronze underline on hover/active.
-- Footer: midnight-surface band, bronze section headings in Karla small-caps, italic Cormorant brand mark, hairline bronze dividers.
+Micro-polish only, using the existing `useReveal`, `animate-reveal`, `animate-float`, and hairline-expand patterns from the landing pass. No new keyframes.
 
-**Shop / Collections**
-- Editorial header: eyebrow ("Volume II — Le Catalogue"), oversized italic Cormorant title with bronze accent word, hairline rule.
-- Product grid → asymmetric card grid on framed plinths (hairline bronze corner rules, slow-zoom on hover, italic price in bronze).
-- Filter/sort bar: minimal, underline-only controls, Karla labels.
+- **Cart**:
+  - Row entrance: staggered `useReveal` per line item.
+  - Quantity change: bronze hairline pulse under the row on update.
+  - Remove: fade-out + height collapse before unmount (200ms).
+  - Subtotal/total: italic Cormorant, animate number tween on change (simple `useEffect` interpolation, 300ms).
+  - Empty cart: italic "Your atelier is empty" with bronze CTA back to Shop.
+- **CheckoutShipping / CheckoutPayment**:
+  - Step indicator (01 · Shipping — 02 · Payment — 03 · Confirmation) in Karla small-caps with bronze active numeral.
+  - Section reveal on mount (staggered).
+  - Submit button: bronze fill-sweep on hover; on submit, swap label to `<Loader2 className="animate-spin" /> Processing` and disable — using local `isSubmitting` state around the existing navigate call. No fake delays; just wire the state so backend integration slots in.
+  - Field focus: bronze underline expand (already the pattern).
+- **OrderConfirmation**:
+  - Hero checkmark: bronze ring, single scale-in on mount.
+  - Order summary card floats in with the existing reveal pattern.
 
-**ProductDetail**
-- Two-column asymmetric: framed floating image (animate-float) left, content right with vertical side label, staggered reveal.
-- Notes/details in Karla wide-tracking, italic Cormorant price, bronze CTA with fill sweep.
+## Verification
 
-**Story / Craftsmanship / Sustainability / Careers**
-- Zigzag manifesto bands (image/text alternating), index numerals (`01`, `02`…) as ghosted Cormorant, italic bronze accent words, reveal on scroll.
-- Pull-quote sections mirror BrandStory pattern.
-
-**Contact / StoreLocator**
-- Split layout: editorial intro left, form/map right inside hairline bronze frame. Underline-only inputs matching Newsletter.
-
-**FAQ / ShippingReturns / PrivacyPolicy / TermsOfService**
-- Editorial single-column: eyebrow + italic display title, bronze section rules, Cormorant question headings, Karla body. Legal pages get a subtle bronze index rail.
-
-**Auth**
-- Centered midnight-surface card with hairline bronze frame, italic Cormorant heading, underline inputs, bronze CTA. Two tabs styled as small-caps Karla with bronze underline for active.
-
-**Cart / Checkout (Shipping, Payment) / OrderConfirmation**
-- Dark surface panels, bronze section dividers, italic totals in Cormorant, underline inputs, bronze primary CTAs. Checkout steps as small-caps Karla with bronze index numerals.
-
-**Profile**
-- Sidebar-style nav in Karla small-caps with bronze active indicator, content in framed midnight-surface panels.
-
-**NotFound**
-- Oversized italic "404" in Cormorant with bronze glow, Karla eyebrow, single bronze CTA back home.
-
-**SearchDialog**
-- Midnight-surface panel, bronze hairline frame, Karla input, italic result titles.
-
-## Motion budget
-
-Same as landing: staggered `useReveal` on section entry, 6s float on hero/product images, 700ms cubic-bezier hover scales, hairline expansion on link hover. No new keyframes.
-
-## Technical notes
-
-- Only presentation code changes. No hooks, contexts, routes, or data logic touched.
-- Only `text-*`/`bg-*` semantic token classes — no hex, no `text-white`/`bg-black`.
-- Reuse existing components (Button, Input, Card) with new wrapper classes rather than forking variants.
-- Verify with a Playwright pass across `/shop`, `/collections`, `/story`, `/auth`, `/cart`, `/contact`, `/faq`, and `/404` on desktop + mobile, plus a smoke check on `/admin` to confirm no regression.
+Playwright pass, desktop + mobile viewports:
+- `/admin`, `/admin/products`, `/admin/analytics`, `/admin/orders` — palette applied, sidebar readable, active state visible, role filtering unchanged (spot check by toggling `userRole` const).
+- `/shop` — filter/sort works, URL updates, empty state renders when filters exclude everything.
+- `/collections` — sort control works.
+- `/cart` → `/checkout/shipping` → `/checkout/payment` → `/checkout/confirmation` — motion smooth, loading state appears on submit, no console errors.
 
 ## Out of scope
 
-- Admin panel styling
-- New imagery, icons, or assets
-- Copywriting rewrites beyond eyebrows/section labels
-- Any backend, data, or routing change
+- Data hooks, auth, routing, backend
+- New assets or copy rewrites beyond eyebrows/labels
+- New animation keyframes or design tokens
+- Admin business logic, role permissions, table columns
