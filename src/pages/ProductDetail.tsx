@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { formatBDT } from "@/lib/utils";
 import productPrimal from "@/assets/product-primal.jpg";
 import productMidnight from "@/assets/product-midnight.jpg";
 import productEssence from "@/assets/product-essence.jpg";
@@ -22,11 +23,11 @@ const productsData: Record<string, {
   primal: {
     name: "Zavira Primal",
     subtitle: "Eau de Parfum",
-    price: 125,
+    price: 12500,
     sizes: [
-      { size: "30ml", price: 85 },
-      { size: "50ml", price: 125 },
-      { size: "100ml", price: 185 },
+      { size: "30ml", price: 8500 },
+      { size: "50ml", price: 12500 },
+      { size: "100ml", price: 18500 },
     ],
     description: "A bold and commanding fragrance that captures the essence of raw masculinity. Primal opens with invigorating citrus notes, evolving into a rich heart of leather and spice, before settling into a deep, sensual base of oud and amber.",
     notes: {
@@ -39,10 +40,10 @@ const productsData: Record<string, {
   "midnight-elixir": {
     name: "Midnight Elixir",
     subtitle: "Eau de Parfum",
-    price: 185,
+    price: 18500,
     sizes: [
-      { size: "50ml", price: 125 },
-      { size: "100ml", price: 185 },
+      { size: "50ml", price: 12500 },
+      { size: "100ml", price: 18500 },
     ],
     description: "An enigmatic blend that captures the mystery of the midnight hour. This intoxicating elixir weaves together rare ingredients to create an unforgettable olfactory experience.",
     notes: {
@@ -55,10 +56,10 @@ const productsData: Record<string, {
   "rose-noir": {
     name: "Rose Noir",
     subtitle: "Eau de Parfum",
-    price: 145,
+    price: 14500,
     sizes: [
-      { size: "30ml", price: 95 },
-      { size: "75ml", price: 145 },
+      { size: "30ml", price: 9500 },
+      { size: "75ml", price: 14500 },
     ],
     description: "A sophisticated interpretation of the classic rose, reimagined through a lens of darkness and mystery. Rose Noir is for the woman who commands attention without saying a word.",
     notes: {
@@ -71,10 +72,10 @@ const productsData: Record<string, {
   "velvet-amber": {
     name: "Velvet Amber",
     subtitle: "Eau de Parfum",
-    price: 165,
+    price: 16500,
     sizes: [
-      { size: "50ml", price: 115 },
-      { size: "100ml", price: 165 },
+      { size: "50ml", price: 11500 },
+      { size: "100ml", price: 16500 },
     ],
     description: "Warm, enveloping, and utterly luxurious. Velvet Amber wraps you in a cocoon of precious resins and exotic woods, creating a scent that lingers long after you've left the room.",
     notes: {
@@ -116,29 +117,33 @@ const ProductDetail = () => {
             </nav>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-              {/* Image */}
+              {/* Image — flacon anchored on the canvas */}
               <div className="relative">
-                <div className="absolute -top-6 -left-6 w-24 h-24 border-t border-l border-bronze/60 pointer-events-none" />
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 border-b border-r border-bronze/60 pointer-events-none" />
-                <div className="aspect-square bg-midnight-surface overflow-hidden animate-float">
+                <div className="relative aspect-square bg-midnight-surface overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
+                {/* Signature blind-emboss label */}
+                <div className="absolute top-0 left-0 border border-bronze/40 bg-midnight px-4 py-2">
+                  <p className="font-sans-luxury text-[10px] tracking-[0.25em] text-ivory/70">
+                    {product.sizes[selectedSize].size.toUpperCase()} — EXTRAIT DE PARFUM · ৳ BDT
+                  </p>
+                </div>
               </div>
 
               {/* Details */}
-              <div className="flex flex-col justify-center animate-reveal">
+              <div className="flex flex-col justify-center">
                 <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-3">
                   {product.subtitle}
                 </p>
                 <h1 className="text-5xl md:text-6xl mb-4">
-                  <span className="italic">{product.name}</span>
+                  {product.name}
                 </h1>
-                <p className="font-serif-display italic text-3xl text-bronze mb-8">
-                  ${product.sizes[selectedSize].price}.00
+                <p className="text-3xl text-bronze tabular-nums mb-8">
+                  {formatBDT(product.sizes[selectedSize].price)}
                 </p>
 
                 <p className="text-muted-foreground mb-8 leading-relaxed font-sans-luxury">
@@ -172,7 +177,7 @@ const ProductDetail = () => {
                     >
                       <Minus className="h-4 w-4" />
                     </button>
-                    <span className="px-6 py-3 font-medium">{quantity}</span>
+                    <span className="px-6 py-3 font-medium tabular-nums">{quantity}</span>
                     <button
                       className="p-3 hover:bg-accent transition-colors"
                       onClick={() => setQuantity(quantity + 1)}
@@ -197,29 +202,27 @@ const ProductDetail = () => {
                   </Button>
                 </div>
 
-                {/* Notes */}
+                {/* Olfactory formulation grid */}
                 <div className="border-t border-border pt-8">
                   <h3 className="font-display text-lg mb-6">Fragrance Notes</h3>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div>
-                      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Top</p>
-                      {product.notes.top.map((note) => (
-                        <p key={note} className="text-sm mb-1">{note}</p>
+                  <table className="w-full text-sm">
+                    <tbody>
+                      {(
+                        [
+                          ["Top", product.notes.top],
+                          ["Heart", product.notes.heart],
+                          ["Base", product.notes.base],
+                        ] as const
+                      ).map(([label, notes]) => (
+                        <tr key={label} className="border-b border-border/60 last:border-0">
+                          <td className="py-3 pr-6 align-top text-xs uppercase tracking-wide text-muted-foreground">
+                            {label}
+                          </td>
+                          <td className="py-3 align-top">{notes.join(" · ")}</td>
+                        </tr>
                       ))}
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Heart</p>
-                      {product.notes.heart.map((note) => (
-                        <p key={note} className="text-sm mb-1">{note}</p>
-                      ))}
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Base</p>
-                      {product.notes.base.map((note) => (
-                        <p key={note} className="text-sm mb-1">{note}</p>
-                      ))}
-                    </div>
-                  </div>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

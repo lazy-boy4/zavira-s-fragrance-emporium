@@ -170,39 +170,17 @@
 
   .animate-reveal {
     opacity: 0;
-    animation: revealUp 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    animation: revealUp 0.2s ease-out forwards;
   }
-  .animate-float {
-    animation: gentleFloat 7s ease-in-out infinite;
-  }
-  .animate-slow-drift {
-    animation: slowDrift 14s ease-in-out infinite alternate;
-  }
-  .reveal-hidden { opacity: 0; transform: translateY(30px); filter: blur(8px); }
+  .reveal-hidden { opacity: 0; transform: translateY(6px); }
   .reveal-shown {
-    opacity: 1; transform: translateY(0); filter: blur(0);
-    transition: opacity 1.4s cubic-bezier(0.19,1,0.22,1),
-                transform 1.4s cubic-bezier(0.19,1,0.22,1),
-                filter 1.4s cubic-bezier(0.19,1,0.22,1);
+    opacity: 1; transform: translateY(0);
+    transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .delay-100 { animation-delay: 0.1s; transition-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.2s; transition-delay: 0.2s; }
-  .delay-300 { animation-delay: 0.3s; transition-delay: 0.3s; }
-  .delay-500 { animation-delay: 0.5s; transition-delay: 0.5s; }
-  .delay-700 { animation-delay: 0.7s; transition-delay: 0.7s; }
-  .vertical-rl { writing-mode: vertical-rl; }
-
   @keyframes revealUp {
-    from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
-    to { opacity: 1; transform: translateY(0); filter: blur(0); }
-  }
-  @keyframes gentleFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
-  }
-  @keyframes slowDrift {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.06); }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .animate-fade-in {

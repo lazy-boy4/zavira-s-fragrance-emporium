@@ -53,9 +53,10 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const CART_STORAGE_KEY = "zavira_cart";
 const MAX_QUANTITY_PER_ITEM = 10;
 const MAX_ITEMS_IN_CART = 20;
-const FREE_SHIPPING_THRESHOLD = 150;
-const SHIPPING_COST = 15;
-const TAX_RATE = 0.08;
+// All amounts in BDT: free delivery over ৳15,000, ৳150 standard courier, 15% VAT.
+const FREE_SHIPPING_THRESHOLD = 15000;
+const SHIPPING_COST = 150;
+const TAX_RATE = 0.15;
 
 // Validate cart item structure for security
 const isValidCartItem = (item: unknown): item is CartItem => {
@@ -66,7 +67,7 @@ const isValidCartItem = (item: unknown): item is CartItem => {
     typeof obj.name === "string" &&
     typeof obj.price === "number" &&
     obj.price >= 0 &&
-    obj.price <= 10000 && // Maximum reasonable price
+    obj.price <= 100000 && // Maximum reasonable BDT price
     typeof obj.quantity === "number" &&
     obj.quantity >= 1 &&
     obj.quantity <= MAX_QUANTITY_PER_ITEM

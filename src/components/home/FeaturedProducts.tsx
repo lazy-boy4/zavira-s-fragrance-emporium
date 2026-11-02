@@ -8,7 +8,6 @@ type Band = {
   index: string;
   eyebrow: string;
   title: string;
-  accent: string;
   body: string;
   cta: string;
   slug: string;
@@ -20,8 +19,7 @@ const bands: Band[] = [
   {
     index: "01",
     eyebrow: "Collection I",
-    title: "The Architecture",
-    accent: "of Scent",
+    title: "The Architecture of Scent",
     body:
       "A testament to heritage. The raw intensity of oud tempered by the refined precision of European perfumery — sculpted, not sprayed.",
     cta: "Discover Primal",
@@ -32,8 +30,7 @@ const bands: Band[] = [
   {
     index: "02",
     eyebrow: "The Process",
-    title: "Midnight",
-    accent: "Alchemy",
+    title: "Midnight Alchemy",
     body:
       "Rare botanicals harvested under the lunar cycle, aged 180 days in charred oak, distilled to a nectar that lingers on the skin like a whispered secret.",
     cta: "Discover Midnight Elixir",
@@ -44,8 +41,7 @@ const bands: Band[] = [
   {
     index: "03",
     eyebrow: "Signature III",
-    title: "The Bloom",
-    accent: "of Noir",
+    title: "The Bloom of Noir",
     body:
       "Damask rose crushed at dawn, folded into black amber and smoke. A composition that shifts across the hour, never twice the same.",
     cta: "Discover Rose Noir",
@@ -57,30 +53,29 @@ const bands: Band[] = [
 
 /**
  * FeaturedProducts — zigzag gallery of signature fragrances.
- * Alternating image/text bands, index numerals, cinematic reveal.
+ * Alternating image/text bands, quiet index numerals, instant presence.
  */
 export const FeaturedProducts = () => {
   return (
-    <section className="relative bg-midnight text-ivory py-32 md:py-48 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section className="relative bg-midnight text-ivory py-24 md:py-32 px-6 md:px-12 lg:px-24 overflow-hidden">
       {/* Section header */}
-      <div className="max-w-7xl mx-auto text-center mb-24 md:mb-36">
-        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.5em] text-bronze-deep mb-6 block">
+      <div className="max-w-7xl mx-auto mb-20 md:mb-28">
+        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.4em] text-bronze-deep mb-6 block">
           The Collection
         </span>
         <h2 className="font-serif-display text-4xl md:text-6xl font-light text-ivory leading-tight">
-          Signature <span className="italic text-bronze">Fragrances</span>
+          Signature Fragrances
         </h2>
-        <div className="mt-8 mx-auto h-px w-16 bg-bronze/60" />
       </div>
 
-      <div className="max-w-7xl mx-auto flex flex-col space-y-32 md:space-y-56">
+      <div className="max-w-7xl mx-auto flex flex-col space-y-24 md:space-y-32">
         {bands.map((b) => (
           <Band key={b.index} band={b} />
         ))}
       </div>
 
       {/* Footer CTA */}
-      <div className="max-w-7xl mx-auto text-center mt-32 md:mt-40">
+      <div className="max-w-7xl mx-auto text-center mt-24 md:mt-32">
         <Link
           to="/shop"
           className="group inline-flex items-center gap-4"
@@ -111,10 +106,10 @@ const Band = ({ band }: { band: Band }) => {
           imageLeft ? "md:order-1" : "md:order-2"
         }`}
       >
-        <div className="relative aspect-[4/5] md:aspect-[4/5] overflow-hidden border border-bronze-deep/40 bg-midnight-surface">
+        <div className="relative aspect-[4/5] overflow-hidden border border-bronze-deep/40 bg-midnight-surface">
           <img
             src={band.image}
-            alt={`${band.title} ${band.accent}`}
+            alt={band.title}
             className="w-full h-full object-cover transition-transform duration-[2200ms] ease-out group-hover:scale-105"
           />
           <div
@@ -125,14 +120,6 @@ const Band = ({ band }: { band: Band }) => {
             }}
           />
         </div>
-        {/* Corner rule */}
-        <div
-          className={`pointer-events-none absolute w-32 h-32 border-bronze/40 ${
-            imageLeft
-              ? "-top-6 -left-6 border-t border-l"
-              : "-bottom-6 -right-6 border-b border-r"
-          }`}
-        />
         {/* Ghost numeral */}
         <div
           className={`pointer-events-none absolute select-none font-serif-display italic font-light leading-none text-ivory/[0.045] text-[160px] md:text-[220px] ${
@@ -149,13 +136,11 @@ const Band = ({ band }: { band: Band }) => {
           imageLeft ? "md:order-2 md:pl-8" : "md:order-1 md:pr-8"
         }`}
       >
-        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.5em] text-bronze mb-6 block">
+        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.4em] text-bronze mb-6 block">
           {band.eyebrow}
         </span>
-        <h3 className="font-serif-display text-5xl md:text-6xl font-light leading-[1.05] text-ivory mb-8">
+        <h3 className="font-serif-display text-4xl md:text-5xl font-light leading-[1.1] text-ivory mb-8">
           {band.title}
-          <br />
-          <span className="italic text-bronze">{band.accent}</span>
         </h3>
         <p className="font-sans-luxury text-base md:text-lg font-light leading-relaxed text-ivory/60 max-w-md mb-10">
           {band.body}
