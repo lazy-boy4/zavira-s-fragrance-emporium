@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { formatBDT } from "@/lib/utils";
 import productPrimal from "@/assets/product-primal.jpg";
 import productMidnight from "@/assets/product-midnight.jpg";
 import productEssence from "@/assets/product-essence.jpg";
@@ -15,7 +15,7 @@ const products = [
     id: 1,
     name: "Zavira Primal",
     subtitle: "Eau de Parfum",
-    price: 125,
+    price: 12500,
     size: "50ml / 1.7 FL OZ",
     image: productPrimal,
     slug: "primal",
@@ -25,7 +25,7 @@ const products = [
     id: 2,
     name: "Midnight Elixir",
     subtitle: "Eau de Parfum",
-    price: 185,
+    price: 18500,
     size: "100ml / 3.4 FL OZ",
     image: productMidnight,
     slug: "midnight-elixir",
@@ -35,7 +35,7 @@ const products = [
     id: 3,
     name: "Rose Noir",
     subtitle: "Eau de Parfum",
-    price: 145,
+    price: 14500,
     size: "75ml / 2.5 FL OZ",
     image: productEssence,
     slug: "rose-noir",
@@ -45,7 +45,7 @@ const products = [
     id: 4,
     name: "Velvet Amber",
     subtitle: "Eau de Parfum",
-    price: 165,
+    price: 16500,
     size: "100ml / 3.4 FL OZ",
     image: productVelvet,
     slug: "velvet-amber",
@@ -55,7 +55,7 @@ const products = [
     id: 5,
     name: "Essence of Noir",
     subtitle: "Eau de Parfum",
-    price: 195,
+    price: 19500,
     size: "100ml / 3.4 FL OZ",
     image: productPrimal,
     slug: "essence-noir",
@@ -65,7 +65,7 @@ const products = [
     id: 6,
     name: "Blanc de Lune",
     subtitle: "Eau de Parfum",
-    price: 155,
+    price: 15500,
     size: "75ml / 2.5 FL OZ",
     image: productMidnight,
     slug: "blanc-de-lune",
@@ -81,10 +81,8 @@ const sortOptions = [
   { value: "name-asc", label: "Name · A to Z" },
 ] as const;
 
-const PRICE_MIN = 100;
-const PRICE_MAX = 200;
-
-const numberWords = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+const PRICE_MIN = 8000;
+const PRICE_MAX = 20000;
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -116,28 +114,21 @@ const Shop = () => {
   }, [activeCategory, sort, min, max]);
 
   const resetFilters = () => setSearchParams({}, { replace: true });
-  const countWord = filteredProducts.length < numberWords.length
-    ? numberWords[filteredProducts.length]
-    : String(filteredProducts.length);
 
   return (
     <div className="min-h-screen dark">
       <Header />
       <main className="pt-20">
         {/* Hero */}
-        <section className="py-20 lg:py-28 bg-midnight-surface border-b border-bronze/15 relative overflow-hidden">
-          <span aria-hidden className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 vertical-rl font-sans-luxury text-[0.65rem] tracking-[0.4em] uppercase text-bronze/60">
-            Volume II — Le Catalogue
-          </span>
-          <div className="container mx-auto px-4 lg:px-8 text-center animate-reveal">
+        <section className="py-20 lg:py-28 bg-midnight-surface border-b border-bronze/15">
+          <div className="container mx-auto px-4 lg:px-8">
             <p className="font-sans-luxury text-xs uppercase tracking-[0.35em] text-bronze mb-6">
-              La Collection
+              The Catalogue
             </p>
             <h1 className="text-5xl md:text-7xl mb-6">
-              Shop All <span className="italic text-bronze">Fragrances</span>
+              Shop All Fragrances
             </h1>
-            <div className="w-16 h-px bg-bronze mx-auto mb-6" />
-            <p className="text-muted-foreground max-w-xl mx-auto font-sans-luxury">
+            <p className="text-muted-foreground max-w-xl font-sans-luxury">
               Explore our curated collection of luxury perfumes, each crafted to evoke a unique sensory experience.
             </p>
           </div>
@@ -178,15 +169,15 @@ const Shop = () => {
                 <div>
                   <div className="flex items-baseline justify-between mb-3">
                     <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze">Price</p>
-                    <p className="font-serif-display italic text-sm text-ivory/80">
-                      ${min} — ${max}
+                    <p className="text-sm text-ivory/80 tabular-nums">
+                      {formatBDT(min)} — {formatBDT(max)}
                     </p>
                   </div>
                   <Slider
                     value={[min, max]}
                     min={PRICE_MIN}
                     max={PRICE_MAX}
-                    step={5}
+                    step={500}
                     onValueChange={([lo, hi]) => {
                       const next = new URLSearchParams(searchParams);
                       if (lo === PRICE_MIN) next.delete("min"); else next.set("min", String(lo));
@@ -216,8 +207,8 @@ const Shop = () => {
               </div>
 
               <div className="flex items-center justify-between pt-6 mt-6 border-t border-bronze/15">
-                <p className="font-serif-display italic text-sm text-ivory/70">
-                  {countWord} composition{filteredProducts.length === 1 ? "" : "s"}
+                <p className="text-sm text-ivory/70 tabular-nums">
+                  {filteredProducts.length} composition{filteredProducts.length === 1 ? "" : "s"}
                 </p>
                 <button
                   type="button"
@@ -252,11 +243,6 @@ const Shop = () => {
                   className="group"
                 >
                   <div className="relative aspect-[3/4] mb-6 overflow-hidden bg-midnight-surface">
-                    {/* hairline bronze corner rules */}
-                    <span aria-hidden className="absolute top-0 left-0 w-6 h-px bg-bronze/60 z-10" />
-                    <span aria-hidden className="absolute top-0 left-0 h-6 w-px bg-bronze/60 z-10" />
-                    <span aria-hidden className="absolute bottom-0 right-0 w-6 h-px bg-bronze/60 z-10" />
-                    <span aria-hidden className="absolute bottom-0 right-0 h-6 w-px bg-bronze/60 z-10" />
                     <img
                       src={product.image}
                       alt={product.name}
@@ -274,7 +260,7 @@ const Shop = () => {
                     <p className="text-sm text-muted-foreground mb-2 font-sans-luxury">
                       {product.size}
                     </p>
-                    <p className="font-serif-display italic text-lg text-bronze">${product.price}.00</p>
+                    <p className="text-lg text-bronze tabular-nums">{formatBDT(product.price)}</p>
                   </div>
                 </Link>
               ))}
