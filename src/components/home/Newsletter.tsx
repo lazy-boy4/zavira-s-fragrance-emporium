@@ -28,17 +28,14 @@ export const Newsletter = () => {
         ref={ref}
         className={`relative max-w-3xl mx-auto ${cls}`}
       >
-        {/* Bronze frame */}
+        {/* Hairline frame */}
         <div className="relative border border-bronze-deep/50 bg-midnight-surface/50 px-8 py-16 md:px-16 md:py-20">
-          <div className="pointer-events-none absolute -top-3 -left-3 w-20 h-20 border-t border-l border-bronze/60" />
-          <div className="pointer-events-none absolute -bottom-3 -right-3 w-20 h-20 border-b border-r border-bronze/60" />
-
           <div className="text-center">
-            <span className="font-sans-luxury text-[10px] uppercase tracking-[0.5em] text-bronze mb-6 block">
+            <span className="font-sans-luxury text-[10px] uppercase tracking-[0.4em] text-bronze mb-6 block">
               Correspondence
             </span>
             <h2 className="font-serif-display text-4xl md:text-5xl font-light leading-tight text-ivory mb-6">
-              Join the <span className="italic text-bronze">Inner Circle</span>
+              Join the Inner Circle
             </h2>
             <p className="font-sans-luxury text-base font-light text-ivory/60 max-w-md mx-auto mb-12">
               Private dispatches on new compositions, atelier notes, and

@@ -67,9 +67,8 @@ const Collections = () => {
               Curated for the Discerning
             </p>
             <h1 className="text-5xl md:text-7xl mb-6">
-              Our <span className="italic text-bronze">Collections</span>
+              Our Collections
             </h1>
-            <div className="w-16 h-px bg-bronze mx-auto mb-6" />
             <p className="text-muted-foreground max-w-xl mx-auto font-sans-luxury">
               Each collection tells a unique story, crafted to evoke distinct emotions and memories.
             </p>

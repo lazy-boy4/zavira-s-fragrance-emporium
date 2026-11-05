@@ -37,10 +37,7 @@ export const Footer = () => {
               />
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed mb-6 font-sans-luxury">
-              Essence of the Noir. Luxury fragrances crafted in France, designed for those who dare to stand apart.
-            </p>
-            <p className="font-serif-display italic text-bronze text-lg">
-              L'âme de la Nuit
+              Luxury fragrances crafted for those who dare to stand apart. Shipping across Bangladesh.
             </p>
           </div>
 
@@ -99,7 +96,7 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-bronze/15 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground font-sans-luxury tracking-wide">
-            © {new Date().getFullYear()} Zavira Parfums. All rights reserved. Made in France.
+            © {new Date().getFullYear()} Zavira Parfums. All rights reserved. Dhaka, Bangladesh.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="text-xs text-muted-foreground hover:text-bronze transition-colors font-sans-luxury tracking-wide">

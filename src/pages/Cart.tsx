@@ -4,25 +4,26 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { formatBDT } from "@/lib/utils";
 
 /**
  * Cart Page - Uses CartContext for state management
- * 
+ *
  * Security:
  * - Cart data validated via CartContext
  * - Max quantity limits enforced
  * - Prices should be validated server-side during checkout
  */
 const Cart = () => {
-  const { 
-    items, 
-    updateQuantity, 
-    removeItem, 
-    getSubtotal, 
-    getShipping, 
-    getTax, 
+  const {
+    items,
+    updateQuantity,
+    removeItem,
+    getSubtotal,
+    getShipping,
+    getTax,
     getTotal,
-    isLoading 
+    isLoading
   } = useCart();
 
   if (isLoading) {
@@ -47,23 +48,22 @@ const Cart = () => {
       <main className="pt-20">
         <section className="py-12 lg:py-24 bg-background">
           <div className="container mx-auto px-4 lg:px-8">
-            <header className="mb-12 text-center animate-reveal">
+            <header className="mb-12 animate-reveal">
               <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.35em] text-bronze mb-4">
-                Votre Panier
+                Your Bag
               </p>
               <h1 className="font-serif-display text-4xl md:text-5xl mb-4">
-                Your <span className="italic text-bronze">Selection</span>
+                Your Selection
               </h1>
-              <div className="w-12 h-px bg-bronze/60 mx-auto mb-4" />
               <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground font-sans-luxury">
-                Free shipping on orders over $150
+                Free courier on orders over {formatBDT(15000)}
               </p>
             </header>
 
             {items.length === 0 ? (
               <div className="text-center py-24 border border-bronze/15 bg-midnight-surface/30 animate-reveal">
                 <p className="font-serif-display italic text-3xl text-ivory/80 mb-6">
-                  Your atelier is empty.
+                  Your bag is empty.
                 </p>
                 <Link to="/shop">
                   <Button variant="luxury">Discover the Collection</Button>
@@ -77,10 +77,6 @@ const Cart = () => {
                     {items.map((item) => (
                       <div key={item.id} className="flex py-10">
                         <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden bg-midnight-surface">
-                          <span aria-hidden className="absolute top-0 left-0 w-4 h-px bg-bronze/60 z-10" />
-                          <span aria-hidden className="absolute top-0 left-0 h-4 w-px bg-bronze/60 z-10" />
-                          <span aria-hidden className="absolute bottom-0 right-0 w-4 h-px bg-bronze/60 z-10" />
-                          <span aria-hidden className="absolute bottom-0 right-0 h-4 w-px bg-bronze/60 z-10" />
                           <img
                             src={item.image}
                             alt={item.name}
@@ -99,7 +95,7 @@ const Cart = () => {
                               <p className="mt-1 text-sm text-muted-foreground">{item.size}</p>
                             </div>
                             <div className="flex sm:justify-end items-start">
-                              <p className="font-serif-display italic text-lg text-bronze">${(item.price * item.quantity).toFixed(2)}</p>
+                              <p className="text-lg text-bronze tabular-nums">{formatBDT(item.price * item.quantity)}</p>
                             </div>
                           </div>
                           <div className="flex items-center justify-between mt-4">
@@ -112,7 +108,7 @@ const Cart = () => {
                               >
                                 <Minus className="h-4 w-4" />
                               </button>
-                              <span className="px-4 py-1 font-serif-display italic text-bronze">{item.quantity}</span>
+                              <span className="px-4 py-1 tabular-nums">{item.quantity}</span>
                               <button
                                 className="p-2 hover:bg-bronze/10 hover:text-bronze transition-colors"
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
@@ -138,31 +134,26 @@ const Cart = () => {
 
                 {/* Order Summary */}
                 <section className="lg:col-span-5 mt-16 lg:mt-0">
-                  <div className="relative bg-midnight-surface border border-bronze/20 p-6 sm:p-8 lg:sticky lg:top-24">
-                    <span aria-hidden className="absolute top-0 left-0 w-6 h-px bg-bronze/60" />
-                    <span aria-hidden className="absolute top-0 left-0 h-6 w-px bg-bronze/60" />
-                    <span aria-hidden className="absolute bottom-0 right-0 w-6 h-px bg-bronze/60" />
-                    <span aria-hidden className="absolute bottom-0 right-0 h-6 w-px bg-bronze/60" />
-                    <p className="font-sans-luxury text-[0.65rem] uppercase tracking-[0.3em] text-bronze mb-2">Résumé</p>
-                    <h2 className="font-serif-display italic text-2xl mb-6">Order Summary</h2>
+                  <div className="bg-midnight-surface border border-bronze/20 p-6 sm:p-8 lg:sticky lg:top-24">
+                    <h2 className="font-serif-display text-2xl mb-6">Order Summary</h2>
                     <dl className="space-y-4">
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-muted-foreground">Subtotal</dt>
-                        <dd className="font-serif-display italic text-bronze">${getSubtotal().toFixed(2)}</dd>
+                        <dd className="text-bronze tabular-nums">{formatBDT(getSubtotal())}</dd>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-bronze/15">
-                        <dt className="text-sm text-muted-foreground">Shipping</dt>
-                        <dd className="font-serif-display italic text-bronze">
-                          {getShipping() === 0 ? "Free" : `$${getShipping().toFixed(2)}`}
+                        <dt className="text-sm text-muted-foreground">Courier</dt>
+                        <dd className="text-bronze tabular-nums">
+                          {getShipping() === 0 ? "Free" : formatBDT(getShipping())}
                         </dd>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-bronze/15">
-                        <dt className="text-sm text-muted-foreground">Tax estimate</dt>
-                        <dd className="font-serif-display italic text-bronze">${getTax().toFixed(2)}</dd>
+                        <dt className="text-sm text-muted-foreground">VAT (15%)</dt>
+                        <dd className="text-bronze tabular-nums">{formatBDT(getTax())}</dd>
                       </div>
                       <div className="flex items-center justify-between pt-4 border-t border-bronze/30">
                         <dt className="font-sans-luxury text-xs uppercase tracking-[0.25em]">Order total</dt>
-                        <dd className="text-2xl font-serif-display italic text-bronze">${getTotal().toFixed(2)}</dd>
+                        <dd className="text-2xl font-serif-display text-bronze tabular-nums">{formatBDT(getTotal())}</dd>
                       </div>
                     </dl>
                     <div className="mt-8">
