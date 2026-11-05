@@ -24,11 +24,10 @@ const Story = () => {
               Our Heritage
             </p>
             <h1 className="text-6xl md:text-8xl mb-6">
-              The Zavira <span className="italic text-bronze">Story</span>
+              The Zavira Story
             </h1>
-            <div className="w-16 h-px bg-bronze mx-auto mb-6" />
             <p className="text-xl text-muted-foreground font-serif-display italic">
-              L'âme de la Nuit — The Soul of the Night
+              The soul of the night
             </p>
           </div>
         </section>

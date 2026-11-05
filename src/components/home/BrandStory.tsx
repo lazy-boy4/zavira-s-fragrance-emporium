@@ -9,24 +9,14 @@ export const BrandStory = () => {
   const { ref, cls } = useReveal(0.25);
 
   return (
-    <section className="relative bg-midnight text-ivory py-32 md:py-48 px-6 md:px-12 overflow-hidden">
-      {/* Ambient light leak */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[700px] w-[700px] rounded-full opacity-[0.08] blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, hsl(var(--bronze)) 0%, transparent 70%)",
-        }}
-      />
-
+    <section className="relative bg-midnight text-ivory py-24 md:py-32 px-6 md:px-12 overflow-hidden">
       <div
         ref={ref}
         className={`relative max-w-4xl mx-auto text-center flex flex-col items-center ${cls}`}
       >
         <div className="w-px h-24 bg-gradient-to-b from-bronze to-transparent mb-12" />
 
-        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.5em] text-bronze-deep mb-10 block">
+        <span className="font-sans-luxury text-[10px] uppercase tracking-[0.4em] text-bronze-deep mb-10 block">
           The Zavira Manifesto
         </span>
 
