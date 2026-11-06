@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -267,7 +268,7 @@ export default function ProductList() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>${product.price.toFixed(2)}</TableCell>
+                  <TableCell>{formatBDT(product.price)}</TableCell>
                   <TableCell>{product.stock}</TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>

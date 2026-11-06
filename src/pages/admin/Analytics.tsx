@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import {
   TrendingUp,
@@ -135,7 +136,7 @@ export default function Analytics() {
     },
     {
       title: "Avg. Order Value",
-      value: `$${kpiData.avgOrderValue.toFixed(2)}`,
+      value: formatBDT(kpiData.avgOrderValue),
       change: `${kpiData.aovChange > 0 ? "+" : ""}${kpiData.aovChange}%`,
       trend: kpiData.aovChange >= 0 ? "up" : "down",
       icon: Package,

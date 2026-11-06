@@ -31,7 +31,7 @@ const ShippingReturns = () => {
               <div className="text-center p-6">
                 <Truck className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="font-display text-lg font-medium mb-2">Free Shipping</h3>
-                <p className="text-sm text-muted-foreground">On orders over $150</p>
+                <p className="text-sm text-muted-foreground">On orders over ৳15,000</p>
               </div>
               <div className="text-center p-6">
                 <Clock className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
@@ -66,7 +66,7 @@ const ShippingReturns = () => {
                     <div className="space-y-4">
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Standard Shipping (5-7 business days)</span>
-                        <span className="font-medium">$10.00</span>
+                        <span className="font-medium">৳150</span>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Express Shipping (3-5 business days)</span>
