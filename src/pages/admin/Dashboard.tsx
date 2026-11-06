@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  DollarSign,
+  Banknote,
   ShoppingCart,
   Package,
   Users,
@@ -32,10 +32,10 @@ import { DiscountFormModal } from "@/components/admin/DiscountFormModal";
 const stats = [
   {
     title: "Total Revenue",
-    value: "$45,231.89",
+    value: "৳45,23,189",
     change: "+20.1%",
     trend: "up" as const,
-    icon: DollarSign,
+    icon: Banknote,
   },
   {
     title: "Orders",
@@ -61,11 +61,11 @@ const stats = [
 ];
 
 const recentOrders = [
-  { id: "ZAV-2847", customer: "John Smith", total: "$285.00", status: "Processing", date: "Today" },
-  { id: "ZAV-2846", customer: "Emma Wilson", total: "$145.00", status: "Shipped", date: "Today" },
-  { id: "ZAV-2845", customer: "Michael Brown", total: "$430.00", status: "Delivered", date: "Yesterday" },
-  { id: "ZAV-2844", customer: "Sarah Davis", total: "$95.00", status: "Processing", date: "Yesterday" },
-  { id: "ZAV-2843", customer: "James Johnson", total: "$210.00", status: "Delivered", date: "Dec 24" },
+  { id: "ZAV-2847", customer: "John Smith", total: "৳285", status: "Processing", date: "Today" },
+  { id: "ZAV-2846", customer: "Emma Wilson", total: "৳145", status: "Shipped", date: "Today" },
+  { id: "ZAV-2845", customer: "Michael Brown", total: "৳430", status: "Delivered", date: "Yesterday" },
+  { id: "ZAV-2844", customer: "Sarah Davis", total: "৳95", status: "Processing", date: "Yesterday" },
+  { id: "ZAV-2843", customer: "James Johnson", total: "৳210", status: "Delivered", date: "Dec 24" },
 ];
 
 const quickActions = [
@@ -86,9 +86,8 @@ export default function Dashboard() {
           Volume — Commerce
         </p>
         <h1 className="font-serif-display text-3xl md:text-4xl">
-          The <span className="italic text-bronze">Atelier</span> Overview
+          Overview
         </h1>
-        <div className="w-12 h-px bg-bronze/60 mt-3" />
         <p className="text-muted-foreground mt-4 font-sans-luxury">
           A quiet pulse of the maison. Today's essence, in numbers.
         </p>

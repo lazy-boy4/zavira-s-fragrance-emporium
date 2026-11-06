@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -87,12 +88,12 @@ const CheckoutPayment = () => {
             <span className="w-8 h-8 rounded-full border border-bronze/40 text-bronze/60 flex items-center justify-center font-serif-display italic text-sm">1</span>
             <span className="text-xs font-sans-luxury tracking-[0.25em] text-ivory/50 uppercase">Shipping</span>
           </div>
-          <div className="w-12 h-px bg-bronze/40" aria-hidden="true" />
+          <div className="w-12 h-px bg-border" aria-hidden="true" />
           <div className="flex items-center gap-2">
             <span className="w-8 h-8 rounded-full border border-bronze bg-bronze/10 text-bronze flex items-center justify-center font-serif-display italic text-sm">2</span>
             <span className="text-xs font-sans-luxury tracking-[0.25em] text-bronze uppercase">Payment</span>
           </div>
-          <div className="w-12 h-px bg-bronze/20" aria-hidden="true" />
+          <div className="w-12 h-px bg-border" aria-hidden="true" />
           <div className="flex items-center gap-2">
             <span className="w-8 h-8 rounded-full border border-bronze/30 text-ivory/40 flex items-center justify-center font-serif-display italic text-sm">3</span>
             <span className="text-xs font-sans-luxury tracking-[0.25em] text-ivory/40 uppercase">Confirm</span>
@@ -244,7 +245,7 @@ const CheckoutPayment = () => {
                         <p className="text-xs text-muted-foreground mt-1">{item.size}</p>
                         <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                       </div>
-                      <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-sm font-medium">{formatBDT(item.price * item.quantity)}</p>
                     </div>
                   </div>
                 ))}
@@ -262,20 +263,20 @@ const CheckoutPayment = () => {
               <div className="pt-6 space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>{formatBDT(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
                   <span className="text-xs tracking-wide text-muted-foreground">
-                    {subtotal >= 150 ? "FREE" : "$15.00"}
+                    {subtotal >= 15000 ? "Free" : formatBDT(150)}
                   </span>
                 </div>
                 <div className="flex justify-between pt-4 border-t border-border">
                   <span className="font-medium tracking-wide">TOTAL</span>
                   <div className="text-right">
-                    <span className="text-xs text-muted-foreground mr-2">USD</span>
+                    <span className="text-xs text-muted-foreground mr-2">BDT</span>
                     <span className="text-xl font-display font-medium">
-                      ${(subtotal + (subtotal >= 150 ? 0 : 15)).toFixed(2)}
+                      {formatBDT(subtotal + (subtotal >= 15000 ? 0 : 150))}
                     </span>
                   </div>
                 </div>
