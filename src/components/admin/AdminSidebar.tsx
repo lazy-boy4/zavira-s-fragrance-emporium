@@ -111,13 +111,13 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
             key={item.path}
             to={item.path}
             className={cn(
-              "relative flex items-center gap-3 px-3 py-2.5 text-xs font-sans-luxury uppercase tracking-[0.2em] transition-colors",
+              "relative flex items-center gap-3 px-3 py-2 text-sm font-sans-luxury transition-colors",
               isActive(item.path)
                 ? "text-bronze before:absolute before:left-0 before:top-2 before:bottom-2 before:w-px before:bg-bronze"
                 : "text-ivory/60 hover:text-bronze"
             )}
           >
-            <item.icon className="h-5 w-5 flex-shrink-0" />
+            <item.icon className="h-4 w-4 flex-shrink-0" />
             {!collapsed && <span>{item.label}</span>}
           </NavLink>
         ))}
@@ -127,9 +127,9 @@ export default function AdminSidebar({ userRole = "owner" }: AdminSidebarProps) 
       <div className="mt-auto p-2 border-t border-bronze/20">
         <NavLink
           to="/"
-          className="flex items-center gap-3 px-3 py-2.5 text-xs font-sans-luxury uppercase tracking-[0.2em] text-ivory/60 hover:text-bronze transition-colors"
+          className="flex items-center gap-3 px-3 py-2 text-sm font-sans-luxury text-ivory/60 hover:text-bronze transition-colors"
         >
-          <LogOut className="h-5 w-5 flex-shrink-0" />
+          <LogOut className="h-4 w-4 flex-shrink-0" />
           {!collapsed && <span>Back to Store</span>}
         </NavLink>
       </div>

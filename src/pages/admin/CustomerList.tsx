@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import { Search, MoreHorizontal, Mail, Eye, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -130,7 +131,7 @@ export default function CustomerList() {
                     )}
                   </TableCell>
                   <TableCell>{customer.orders}</TableCell>
-                  <TableCell>${customer.spent.toFixed(2)}</TableCell>
+                  <TableCell>{formatBDT(customer.spent)}</TableCell>
                   <TableCell>{customer.lastOrder}</TableCell>
                   <TableCell>{customer.createdAt}</TableCell>
                   <TableCell>

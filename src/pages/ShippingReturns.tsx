@@ -31,7 +31,7 @@ const ShippingReturns = () => {
               <div className="text-center p-6">
                 <Truck className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="font-display text-lg font-medium mb-2">Free Shipping</h3>
-                <p className="text-sm text-muted-foreground">On orders over $150</p>
+                <p className="text-sm text-muted-foreground">On orders over ৳15,000</p>
               </div>
               <div className="text-center p-6">
                 <Clock className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
@@ -66,18 +66,18 @@ const ShippingReturns = () => {
                     <div className="space-y-4">
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Standard Shipping (5-7 business days)</span>
-                        <span className="font-medium">$10.00</span>
+                        <span className="font-medium">৳150</span>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Express Shipping (3-5 business days)</span>
-                        <span className="font-medium">$20.00</span>
+                        <span className="font-medium">৳250</span>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Priority Shipping (1-2 business days)</span>
-                        <span className="font-medium">$35.00</span>
+                        <span className="font-medium">৳400</span>
                       </div>
                       <p className="text-sm text-muted-foreground mt-4">
-                        * Free standard shipping on orders over $150
+                        * Free standard shipping on orders over ৳15,000
                       </p>
                     </div>
                   </div>
@@ -87,15 +87,15 @@ const ShippingReturns = () => {
                     <div className="space-y-4">
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Canada (7-10 business days)</span>
-                        <span className="font-medium">$25.00</span>
+                        <span className="font-medium">৳1,200</span>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Europe (7-14 business days)</span>
-                        <span className="font-medium">$35.00</span>
+                        <span className="font-medium">৳400</span>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b border-border">
                         <span>Rest of World (10-21 business days)</span>
-                        <span className="font-medium">$45.00</span>
+                        <span className="font-medium">৳2,500</span>
                       </div>
                       <p className="text-sm text-muted-foreground mt-4">
                         * International orders may be subject to customs duties and taxes

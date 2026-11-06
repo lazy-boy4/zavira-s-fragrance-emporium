@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Check, CreditCard } from "lucide-react";
 import { Header } from "@/components/layout/Header";
@@ -77,7 +78,7 @@ const OrderConfirmation = () => {
                       <p className="text-sm text-muted-foreground mt-1">{orderItem.size}</p>
                       <p className="text-sm text-muted-foreground mt-3">Qty: {orderItem.quantity}</p>
                     </div>
-                    <p className="text-lg font-medium">${orderItem.price.toFixed(2)}</p>
+                    <p className="text-lg font-medium">{formatBDT(orderItem.price)}</p>
                   </div>
                 </div>
               </div>
@@ -86,7 +87,7 @@ const OrderConfirmation = () => {
               <div className="py-6 border-b border-border space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>{formatBDT(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping (Standard)</span>
@@ -94,11 +95,11 @@ const OrderConfirmation = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>{formatBDT(tax)}</span>
                 </div>
                 <div className="flex justify-between pt-4 border-t border-border">
                   <span className="font-display text-lg font-medium">Total</span>
-                  <span className="text-xl font-display font-medium">${total.toFixed(2)}</span>
+                  <span className="text-xl font-display font-medium">{formatBDT(total)}</span>
                 </div>
               </div>
 

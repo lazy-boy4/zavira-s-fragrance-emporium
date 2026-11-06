@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
@@ -283,7 +284,7 @@ const Profile = () => {
                                   </p>
                                 ))}
                               </div>
-                              <p className="font-display font-medium">${order.total.toFixed(2)}</p>
+                              <p className="font-display font-medium">{formatBDT(order.total)}</p>
                             </div>
                           </div>
                         </div>
