@@ -20,7 +20,7 @@ const faqCategories = [
       },
       {
         question: "Do you offer free shipping?",
-        answer: "Yes! We offer free standard shipping on all domestic orders over $150. International orders qualify for free shipping on orders over $300."
+        answer: "Yes! We offer free standard shipping on all domestic orders over ৳15,000 anywhere in Bangladesh."
       },
       {
         question: "How can I track my order?",

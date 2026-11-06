@@ -90,7 +90,7 @@ export default function AdminHeader({ onMenuClick, user }: AdminHeaderProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
               <span className="font-medium">New order received</span>
-              <span className="text-sm text-muted-foreground">Order #ZAV-2847 - $285.00</span>
+              <span className="text-sm text-muted-foreground">Order #ZAV-2847 - ৳28,500</span>
               <span className="text-xs text-muted-foreground">2 minutes ago</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">

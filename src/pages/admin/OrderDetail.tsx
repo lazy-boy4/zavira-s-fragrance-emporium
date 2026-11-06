@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -158,7 +159,7 @@ export default function OrderDetail() {
                       <p className="text-sm text-muted-foreground">{item.variant}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">${item.price.toFixed(2)}</p>
+                      <p className="font-medium">{formatBDT(item.price)}</p>
                       <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                     </div>
                   </div>
@@ -168,20 +169,20 @@ export default function OrderDetail() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${mockOrder.subtotal.toFixed(2)}</span>
+                  <span>{formatBDT(mockOrder.subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>{mockOrder.shipping_cost === 0 ? "Free" : `$${mockOrder.shipping_cost.toFixed(2)}`}</span>
+                  <span>{mockOrder.shipping_cost === 0 ? "Free" : formatBDT(mockOrder.shipping_cost)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Tax</span>
-                  <span>${mockOrder.tax.toFixed(2)}</span>
+                  <span>{formatBDT(mockOrder.tax)}</span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-medium text-base">
                   <span>Total</span>
-                  <span>${mockOrder.total.toFixed(2)}</span>
+                  <span>{formatBDT(mockOrder.total)}</span>
                 </div>
               </div>
             </CardContent>

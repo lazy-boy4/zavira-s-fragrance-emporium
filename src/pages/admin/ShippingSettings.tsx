@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -405,7 +406,7 @@ export default function ShippingSettings() {
                       {zone.countries.length > 2 && ` +${zone.countries.length - 2} more`}
                     </span>
                   </TableCell>
-                  <TableCell>${zone.baseRate.toFixed(2)}</TableCell>
+                  <TableCell>{formatBDT(zone.baseRate)}</TableCell>
                   <TableCell>
                     {zone.freeShippingThreshold 
                       ? `$${zone.freeShippingThreshold}+` 

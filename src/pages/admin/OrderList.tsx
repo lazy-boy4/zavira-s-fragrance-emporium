@@ -1,3 +1,4 @@
+import { formatBDT } from "@/lib/utils";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -141,7 +142,7 @@ export default function OrderList() {
       order.customer.name,
       order.customer.email,
       order.items.toString(),
-      `$${order.total.toFixed(2)}`,
+      formatBDT(order.total),
       order.status,
       order.payment,
       order.date,
@@ -289,7 +290,7 @@ export default function OrderList() {
                     </div>
                   </TableCell>
                   <TableCell>{order.items}</TableCell>
-                  <TableCell>${order.total.toFixed(2)}</TableCell>
+                  <TableCell>{formatBDT(order.total)}</TableCell>
                   <TableCell>
                     <Badge variant="secondary" className={statusColors[order.status]}>
                       {order.status}

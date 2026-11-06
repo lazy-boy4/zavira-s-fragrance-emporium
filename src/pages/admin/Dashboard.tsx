@@ -32,7 +32,7 @@ import { DiscountFormModal } from "@/components/admin/DiscountFormModal";
 const stats = [
   {
     title: "Total Revenue",
-    value: "৳45,23,189",
+    value: "৳5,427,800",
     change: "+20.1%",
     trend: "up" as const,
     icon: Banknote,
