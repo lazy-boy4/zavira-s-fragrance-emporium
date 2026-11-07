@@ -126,7 +126,7 @@ export default function CollectionEditor() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => navigate("/admin/collections")}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
