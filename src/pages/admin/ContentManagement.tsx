@@ -34,7 +34,7 @@ export default function ContentManagement() {
       <Card>
         <CardContent className="pt-6">
           <Tabs defaultValue="privacy">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 h-auto max-w-full flex-wrap justify-start">
               {contentTypes.map((type) => (
                 <TabsTrigger key={type.id} value={type.id} className="gap-2">
                   <FileText className="h-4 w-4" /> {type.label}

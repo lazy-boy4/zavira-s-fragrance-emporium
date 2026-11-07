@@ -241,7 +241,7 @@ export default function PaymentSettings() {
       </Alert>
 
       <Tabs defaultValue="mobile">
-        <TabsList>
+        <TabsList className="h-auto max-w-full flex-wrap justify-start">
           <TabsTrigger value="mobile" className="gap-2">
             <Wallet className="h-4 w-4" />
             Mobile Payments
