@@ -264,7 +264,7 @@ export default function Analytics() {
         </Card>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         {/* Top Products */}
         {productsLoading ? (
           <BarChartSkeleton height={300} />
@@ -314,7 +314,7 @@ export default function Analytics() {
         )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         {/* Customer Demographics */}
         {demographicsLoading ? (
           <PieChartSkeleton />
