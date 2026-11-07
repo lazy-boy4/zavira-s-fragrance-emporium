@@ -22,7 +22,7 @@ import { paymentSchema, PaymentFormData } from "@/lib/validations";
 const CheckoutPayment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { items, getSubtotal, clearCart } = useCart();
+  const { items, getSubtotal, getShipping, getTax, getTotal, clearCart } = useCart();
   const [paymentMethod, setPaymentMethod] = useState<"card" | "mobile" | "cod">("card");
 
   const form = useForm<PaymentFormData>({
@@ -45,6 +45,19 @@ const CheckoutPayment = () => {
       // IMPORTANT: Never send raw card data to your own server
       // Use Stripe Elements or similar PCI-compliant solution
       
+      // Snapshot the order for the confirmation page before the cart is cleared
+      sessionStorage.setItem("zavira_last_order", JSON.stringify({
+        number: `ZAV-${Date.now().toString().slice(-6)}`,
+        items,
+        subtotal: getSubtotal(),
+        shipping: getShipping(),
+        tax: getTax(),
+        total: getTotal(),
+        paymentMethod,
+        cardLast4: data.cardNumber?.replace(/\D/g, "").slice(-4) || "",
+        shippingInfo: JSON.parse(sessionStorage.getItem("zavira_shipping") || "{}"),
+      }));
+
       // Clear cart on successful order
       clearCart();
       
