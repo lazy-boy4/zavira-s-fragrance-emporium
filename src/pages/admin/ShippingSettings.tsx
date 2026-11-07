@@ -368,7 +368,7 @@ export default function ShippingSettings() {
 
       {/* Shipping zones */}
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4">
           <div>
             <CardTitle className="font-display flex items-center gap-2">
               <Package className="h-5 w-5" />
@@ -383,7 +383,7 @@ export default function ShippingSettings() {
             Add Zone
           </Button>
         </CardHeader>
-        <CardContent>
+        <CardContent className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -461,7 +461,7 @@ export default function ShippingSettings() {
         <CardContent>
           <div className="space-y-4">
             {carriers.map((carrier) => (
-              <div key={carrier.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
+              <div key={carrier.id} className="flex flex-wrap items-center justify-between gap-3 p-4 border border-border rounded-lg">
                 <div className="flex items-center gap-4">
                   <Switch 
                     checked={carrier.enabled} 

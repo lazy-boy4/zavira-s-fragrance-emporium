@@ -261,7 +261,7 @@ export default function PaymentSettings() {
           {providers.filter(p => ["bkash", "nagad", "rocket", "upay"].includes(p.id)).map((provider) => (
             <Card key={provider.id}>
               <CardContent className="pt-6">
-                <div className="flex items-start justify-between">
+                <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div className="text-3xl">{provider.icon}</div>
                     <div>
@@ -318,7 +318,7 @@ export default function PaymentSettings() {
           {providers.filter(p => p.id === "uddoktapay").map((provider) => (
             <Card key={provider.id}>
               <CardContent className="pt-6">
-                <div className="flex items-start justify-between">
+                <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div className="text-3xl">{provider.icon}</div>
                     <div>
