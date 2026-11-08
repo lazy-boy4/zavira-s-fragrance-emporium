@@ -1,67 +1,43 @@
-# Admin Redesign + Shop Filters + Checkout Polish
+# Phase 1 — Store Configuration Foundation
 
-Three focused passes, all presentation-only. No data, routing, or auth changes.
+## Goal
+Create a reusable, Next.js-portable source of truth for the store’s editable settings. In this phase, settings are saved only in the current browser; secure shared/cloud saving waits for real authentication during the Next.js migration.
 
-## 1. Admin: Midnight & Bronze skin (role nav unchanged)
+## Subtasks
 
-Keep every route, permission, and `AdminSidebar` role filter exactly as-is. Only visuals change.
+1. **Define the canonical configuration contract**
+   - Add a TypeScript model and Zod validation for brand identity, contact/social details, announcement bar, header navigation, homepage sections and their order/visibility, footer link groups, informational/legal page content, and commerce/localization settings.
+   - Include Bangladesh localization, BDT, COD, local payment options, delivery zones/carriers, and configurable delivery/tax fields. Rates and contact details without confirmed business values remain unset rather than being invented.
+   - Keep the contract framework-neutral so the same shape can be used by the future Next.js app and its server-side data layer.
 
-- **AdminLayout**: wrap in `<div className="dark ...">` so admin inherits the same midnight tokens as the storefront. Background `bg-midnight`, text `text-ivory`.
-- **AdminSidebar**: `bg-midnight-surface`, hairline `border-bronze/20` right edge, Karla wide-tracked labels (`font-sans-luxury tracking-[0.2em] text-xs uppercase`), bronze active state (bronze left rule + `text-bronze` instead of solid primary block). Logo wordmark in italic Cormorant. Collapse chevron in bronze.
-- **AdminHeader**: transparent over midnight, hairline bronze bottom rule, Karla search input with underline-only styling.
-- **Page chrome pass** (Dashboard, Products, Orders, Customers, Discounts, Analytics, Landing Page, Content, Shipping, Delivery, Payments, Team, Settings, Help):
-  - Page titles: swap `font-display tracking-wider` → italic Cormorant with a small bronze eyebrow (e.g. `Volume — Commerce`).
-  - Cards: `bg-midnight-surface border border-bronze/15`, bronze hairline dividers, italic Cormorant for KPI numbers.
-  - Tables: bronze header rules, muted row separators, italic price cells.
-  - Buttons: primary already maps to bronze via token; verify contrast, tune hover to bronze-deep sweep.
-  - Charts (Analytics): keep existing `--chart-*` tokens — they already read well on midnight.
-- **Guardrail**: no logic edits in admin pages. Only className changes and eyebrow/label text tweaks.
+2. **Create safe, realistic defaults**
+   - Use only verified existing brand/site content and requirements. Keep Zavira identity and the existing luxury design direction; set Bangladesh/BDT and COD as required.
+   - Avoid placeholder US contact details and guessed shipping, VAT, or product prices. Represent unknown values as empty or unconfigured.
 
-## 2. Shop + Collections: filters & sorting
+3. **Add browser-only settings storage**
+   - Implement a small settings store using a versioned localStorage key, Zod validation on reads, defaults when stored data is absent or invalid, and a reset-to-defaults action.
+   - Keep browser APIs out of module initialization so the contract remains safe to import in a future server-rendered Next.js app.
+   - Synchronize changes across tabs in the same browser; do not imply cross-device or multi-user persistence.
 
-Client-side only, operating on the existing mock arrays in `Shop.tsx` and `Collections.tsx`. Backend swap remains a one-line change later.
+4. **Expose the store to the current app**
+   - Add a React provider/hook and mount it at the app root, exposing the current config, update/save, and reset operations.
+   - Do not yet refactor the storefront or build the full customization controls; those belong to later phases that will consume this foundation.
 
-- **Shop filter bar** (sticky under editorial header, hairline bronze frame):
-  - Collection (Noir / Elixir / Rose / Amber / All) — chip row, bronze underline for active.
-  - Price range — dual slider, bronze track.
-  - Fragrance family (if present in product data; otherwise skip cleanly).
-  - Sort: Featured, Price ↑, Price ↓, Newest — Karla small-caps dropdown, underline-only.
-  - Results count in italic Cormorant ("Twelve compositions").
-  - Empty state: italic "No compositions match" + reset link.
-- **Collections page**: add the same sort control (Featured / A–Z / Newest) above the 2-col grid. Filtering is less relevant here (only 4 collections), so filters are Shop-only.
-- **URL sync**: reflect filters in `?collection=&sort=&min=&max=` via `useSearchParams` so the existing `/shop?collection=noir` deep links keep working.
-- **State**: local `useState` + `useMemo` derived list. No context, no new hooks.
+5. **Document the migration boundary**
+   - Add the structural decision to the root `AGENTS.md` and update only the relevant Next.js migration notes: the config is portable, browser storage is temporary, and Agent B should replace it with authenticated server-side persistence.
+   - Defer the final full migration-plan refresh until all requested UI/UX work is complete, as previously requested.
 
-## 3. Cart + Checkout: luxury motion & loading states
+6. **Verify the foundation**
+   - Add a small runnable test for the config’s required Bangladesh/BDT/COD defaults and malformed stored-data fallback.
+   - Run that test and the project’s normal preview/build verification; confirm existing routes still render and no settings are lost when data is invalid.
 
-Micro-polish only, using the existing `useReveal`, `animate-reveal`, `animate-float`, and hairline-expand patterns from the landing pass. No new keyframes.
+## Out of scope for Phase 1
 
-- **Cart**:
-  - Row entrance: staggered `useReveal` per line item.
-  - Quantity change: bronze hairline pulse under the row on update.
-  - Remove: fade-out + height collapse before unmount (200ms).
-  - Subtotal/total: italic Cormorant, animate number tween on change (simple `useEffect` interpolation, 300ms).
-  - Empty cart: italic "Your atelier is empty" with bronze CTA back to Shop.
-- **CheckoutShipping / CheckoutPayment**:
-  - Step indicator (01 · Shipping — 02 · Payment — 03 · Confirmation) in Karla small-caps with bronze active numeral.
-  - Section reveal on mount (staggered).
-  - Submit button: bronze fill-sweep on hover; on submit, swap label to `<Loader2 className="animate-spin" /> Processing` and disable — using local `isSubmitting` state around the existing navigate call. No fake delays; just wire the state so backend integration slots in.
-  - Field focus: bronze underline expand (already the pattern).
-- **OrderConfirmation**:
-  - Hero checkmark: bronze ring, single scale-in on mount.
-  - Order summary card floats in with the existing reveal pattern.
+- Real sign-in, role enforcement, or cloud/database persistence.
+- Admin editing screens for every setting.
+- Refactoring public pages, checkout calculations, or every hardcoded text/image to consume the new config.
+- Final migration-plan completion before the remaining UI/UX phases are finished.
 
-## Verification
+## Technical approach
 
-Playwright pass, desktop + mobile viewports:
-- `/admin`, `/admin/products`, `/admin/analytics`, `/admin/orders` — palette applied, sidebar readable, active state visible, role filtering unchanged (spot check by toggling `userRole` const).
-- `/shop` — filter/sort works, URL updates, empty state renders when filters exclude everything.
-- `/collections` — sort control works.
-- `/cart` → `/checkout/shipping` → `/checkout/payment` → `/checkout/confirmation` — motion smooth, loading state appears on submit, no console errors.
-
-## Out of scope
-
-- Data hooks, auth, routing, backend
-- New assets or copy rewrites beyond eyebrows/labels
-- New animation keyframes or design tokens
-- Admin business logic, role permissions, table columns
+Use the project’s existing React, TypeScript, Zod, and browser storage. Keep defaults, validation, and storage access in focused modules, with no new dependency. No database migration is planned in this phase because the chosen persistence is browser-only and real authentication is deferred.
