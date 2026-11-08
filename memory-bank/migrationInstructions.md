@@ -281,3 +281,8 @@ For questions about this codebase, refer to:
 - `memory-bank/backendInstructions.md` - Complete API spec
 - `memory-bank/techContext.md` - Tech stack details
 - `memory-bank/systemPatterns.md` - Architecture patterns
+
+## UI/UX verification pass (Agent A, Nov 2026)
+- All 18 admin pages and the full checkout (cart → shipping → payment → confirmation) were browser-tested at 1280px and 390px with no page errors or sideways scrolling.
+- Admin `<main>` uses `min-w-0` so wide tables scroll inside their card instead of stretching the page — keep this in the Next.js admin layout.
+- Checkout hands data between steps via sessionStorage: `zavira_shipping` (address form) and `zavira_last_order` (snapshot written on payment, read by the confirmation page). In Next.js, replace both with a server-created order record and render confirmation from `/checkout/confirmation/[orderId]`.
