@@ -286,3 +286,10 @@ For questions about this codebase, refer to:
 - All 18 admin pages and the full checkout (cart → shipping → payment → confirmation) were browser-tested at 1280px and 390px with no page errors or sideways scrolling.
 - Admin `<main>` uses `min-w-0` so wide tables scroll inside their card instead of stretching the page — keep this in the Next.js admin layout.
 - Checkout hands data between steps via sessionStorage: `zavira_shipping` (address form) and `zavira_last_order` (snapshot written on payment, read by the confirmation page). In Next.js, replace both with a server-created order record and render confirmation from `/checkout/confirmation/[orderId]`.
+
+## Store configuration foundation (Agent A, Nov 2026)
+- `src/lib/siteConfig.ts` is the framework-neutral, Zod-validated configuration contract and default values. It covers brand identity, announcement/header links, homepage sections, footer, informational pages, and Bangladesh commerce settings.
+- `src/lib/siteConfigStorage.ts` stores the current preview configuration in the browser under a versioned key. It validates reads and falls back to defaults; it is not shared across devices or users and is not authoritative for security-sensitive settings.
+- `src/contexts/SiteConfigContext.tsx` exposes settings to the current React app and synchronizes same-origin tabs.
+- In Next.js, keep the same schema/defaults where appropriate, but replace browser storage with authenticated server-side persistence. Enforce admin authorization on the server; never rely on client-side roles or browser storage for access control.
+- Unknown contact details, tax rates, shipping charges, thresholds, and COD limits are intentionally unset; configure verified business values before using them to calculate customer charges.
